@@ -1,0 +1,3 @@
+[submodule "thirdparty/comlint_py"]
+	path = thirdparty/comlint_py
+	url = git@github.com:pasparsw/comlint_py.git

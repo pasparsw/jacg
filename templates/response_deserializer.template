@@ -1,0 +1,17 @@
+from logging import getLogger
+
+from @model.response.import_path import @model.response.name
+
+@[for dependency_name, dependency_model in model.response.all_dependencies.items()]@
+from @dependency_model.import_path import @dependency_name
+@[end for]
+
+LOGGER = getLogger("@model.response.name@ Deserializer")
+
+
+class @model.response.name@ Deserializer:
+    @@staticmethod
+    def deserialize(response: @model.response.name@ ) -> dict:
+        LOGGER.debug(f"Deserializing @model.original_name response from dictionary")
+
+        return @model.get_response_deserialization_recipe(struct_models, enum_models, init_indentation_level=3)@

@@ -1,0 +1,13 @@
+from logging import getLogger
+
+from @model.request.import_path import @model.request.name
+
+LOGGER = getLogger("@model.request.name@ Serializer")
+
+
+class @model.request.name@ Serializer:
+    @@staticmethod
+    def serialize(request: @model.request.name@ ) -> dict:
+        LOGGER.debug(f"Serializing @model.original_name request to dictionary")
+
+        return @model.get_request_serialization_recipe(struct_models, init_indentation_level=3)@

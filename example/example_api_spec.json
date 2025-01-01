@@ -1,0 +1,101 @@
+{
+    "api_name": "MyApi",
+    "hostname": "some.hostname.com",
+    "port": 1234,
+    "response_buffer_size": 1024,
+    "timeout": 5,
+    "ssl": true,
+    "commands": {
+        "someSimpleCommand": {
+            "request": {
+                "arg": "int"
+            },
+            "response": {
+                "returned_value": "bool"
+            },
+            "silent": false
+        },
+        "commandWithDefaultArg": {
+            "request": {
+                "arg_1": "str='default_value'",
+                "arg_2": "float",
+                "arg_3": "int=5"
+            },
+            "response": {
+                "returned_value": "int"
+            },
+            "silent": false
+        },
+        "commandWithEnums": {
+            "request": {
+                "arg": "MyEnum"
+            },
+            "response": {
+                "returned_value": "MyOtherEnum"
+            },
+            "silent": false
+        },
+        "commandWithStructArg": {
+            "request": {
+                "arg": "MyStruct"
+            },
+            "response": {
+                "returned_value": "MyOtherStruct"
+            },
+            "silent": false
+        },
+        "commandWithLists": {
+            "request": {
+                "arg": "List[str]"
+            },
+            "response": {
+                "returned_value": "List[int]"
+            },
+            "silent": false
+        },
+        "commandWithListOfStructs": {
+            "request": {
+                "arg": "List[MyStruct]"
+            },
+            "response": {
+                "returned_value": "List[MyOtherStruct]"
+            },
+            "silent": false
+        },
+        "commandWithNestedStructs": {
+            "request": {
+                "arg": "int"
+            },
+            "response": {
+                "returned_value": "MyComplexStruct"
+            },
+            "silent": false
+        }
+    },
+    "enums": {
+        "MyEnum": {
+            "VALUE_1": 1,
+            "VALUE_2": 2,
+            "VALUE_3": 3
+        },
+        "MyOtherEnum": {
+            "VALUE_4": 4,
+            "VALUE_5": 5,
+            "VALUE_6": 6
+        }
+    },
+    "structs": {
+        "MyStruct": {
+            "field_1": "str",
+            "field_2": "int"
+        },
+        "MyOtherStruct": {
+            "field_3": "str",
+            "field_4": "int"
+        },
+        "MyComplexStruct": {
+            "field_5": "MyStruct",
+            "field_6": "List[MyOtherStruct]"
+        }
+    }
+}

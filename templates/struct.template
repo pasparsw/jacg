@@ -1,0 +1,18 @@
+from dataclasses import dataclass
+
+@[for dependency_name, dependency_model in model.dependencies.items()]@
+from @dependency_model.import_path import @dependency_name
+@[end for]
+
+@@dataclass
+class @model.name:
+@[for field in model.fields]@
+@[if field.has_default_value()]@
+    @field.name: @field.type = @field.default_value
+@[else]@
+    @field.name: @field.type
+@[end if]@
+@[end for]@
+@[if not model.fields]@
+    pass
+@[end if]@

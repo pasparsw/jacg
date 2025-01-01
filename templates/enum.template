@@ -1,0 +1,7 @@
+from enum import Enum
+
+
+class @model.name@ (Enum):@
+@[for field in model.fields]
+    @field.name = @field.value@
+@[end for]
