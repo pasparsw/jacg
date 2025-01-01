@@ -13,14 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Initialize submodules
-      run: git submodule update --init
-
-    - name: Setup env
-      run: python3 -m venv ${{github.workspace}}/venv
-
-    - name: Install dependencies
-      run: ${{github.workspace}}/venv/bin/python3 -m pip install -r ${{github.workspace}}/requirements.txt
+    - name: Setup
+      run: ${{github.workspace}}/scripts/install.sh
 
     - name: Run tests
       run: ${{github.workspace}}/venv/bin/python3 -m unittest discover ${{github.workspace}}/test

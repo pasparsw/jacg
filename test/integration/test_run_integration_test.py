@@ -47,19 +47,19 @@ class JacgIntegrationTest(unittest.TestCase):
 
         LOGGER.info(f"Reading files from the generated example output")
 
-        example_output_api_client_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_API_CLIENT_DIR_PATH)]
-        example_output_enums_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_ENUMS_DIR_PATH)]
-        example_output_request_serializers_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_REQUEST_SERIALIZERS_DIR_PATH)]
-        example_output_response_deserializers_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_RESPONSE_DESERIALIZERS_DIR_PATH)]
-        example_output_structs_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_STRUCTS_DIR_PATH)]
+        example_output_api_client_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_API_CLIENT_DIR_PATH) if "__pycache__" not in path]
+        example_output_enums_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_ENUMS_DIR_PATH) if "__pycache__" not in path]
+        example_output_request_serializers_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_REQUEST_SERIALIZERS_DIR_PATH) if "__pycache__" not in path]
+        example_output_response_deserializers_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_RESPONSE_DESERIALIZERS_DIR_PATH) if "__pycache__" not in path]
+        example_output_structs_file_paths: List[str] = [path for path in os.listdir(EXAMPLE_OUTPUT_STRUCTS_DIR_PATH) if "__pycache__" not in path]
 
         LOGGER.info(f"Reading files from the expected generated output")
 
-        expected_output_api_client_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_API_CLIENT_DIR_PATH)]
-        expected_output_enums_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_ENUMS_DIR_PATH)]
-        expected_output_request_serializers_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_REQUEST_SERIALIZERS_DIR_PATH)]
-        expected_output_response_deserializers_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_RESPONSE_DESERIALIZERS_DIR_PATH)]
-        expected_output_structs_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_STRUCTS_DIR_PATH)]
+        expected_output_api_client_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_API_CLIENT_DIR_PATH) if "__pycache__" not in path]
+        expected_output_enums_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_ENUMS_DIR_PATH) if "__pycache__" not in path]
+        expected_output_request_serializers_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_REQUEST_SERIALIZERS_DIR_PATH) if "__pycache__" not in path]
+        expected_output_response_deserializers_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_RESPONSE_DESERIALIZERS_DIR_PATH) if "__pycache__" not in path]
+        expected_output_structs_file_paths: List[str] = [path for path in os.listdir(EXPECTED_OUTPUT_STRUCTS_DIR_PATH) if "__pycache__" not in path]
 
         LOGGER.info(f"Comparing number of files in each of the expected output directories")
 
