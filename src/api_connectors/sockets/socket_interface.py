@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.json_socket_handler.types import Seconds
+from src.api_connectors.types import Seconds
 
 
 class SocketInterface:

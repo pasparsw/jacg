@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock, Mock, call
 
-from src.json_socket_handler.exceptions.communication_timeout import CommunicationTimeout
-from src.json_socket_handler.ssl.ssl_json_socket_handler import SslJsonSocketHandler
-from src.json_socket_handler.types import Seconds
+from src.api_connectors.connectors.communication_timeout import CommunicationTimeout
+from src.api_connectors.connectors.default_api_connector import DefaultApiConnector
+from src.api_connectors.types import Seconds
 
 
 class TestSslJsonSocketHandler(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         response_buffer_size: int = 1024
         timeout: Seconds = 10
 
-        uut = SslJsonSocketHandler(sock, json_encoder, clock)
+        uut = DefaultApiConnector(sock, json_encoder, clock)
 
         uut.connect(hostname, port, response_buffer_size, timeout)
 
@@ -47,7 +47,7 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         sock.receive.side_effect = [encoded_response, b""]
         json_encoder.decode.return_value = expected_response
 
-        uut = SslJsonSocketHandler(sock, json_encoder, clock)
+        uut = DefaultApiConnector(sock, json_encoder, clock)
 
         uut.connect(hostname, port, response_buffer_size, timeout)
         response: dict = uut.send(request)
@@ -90,7 +90,7 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         sock.receive.side_effect = [encoded_response, b""]
         json_encoder.decode.return_value = expected_response
 
-        uut = SslJsonSocketHandler(sock, json_encoder, clock)
+        uut = DefaultApiConnector(sock, json_encoder, clock)
 
         uut.connect(hostname, port, response_buffer_size, timeout)
         response: dict = uut.send(request)
@@ -141,7 +141,7 @@ class TestSslJsonSocketHandler(unittest.TestCase):
             b""]
         json_encoder.decode.return_value = expected_response
 
-        uut = SslJsonSocketHandler(sock, json_encoder, clock)
+        uut = DefaultApiConnector(sock, json_encoder, clock)
 
         uut.connect(hostname, port, response_buffer_size, timeout)
         response: dict = uut.send(request)
@@ -190,7 +190,7 @@ class TestSslJsonSocketHandler(unittest.TestCase):
             b""]
         json_encoder.decode.return_value = expected_response
 
-        uut = SslJsonSocketHandler(sock, json_encoder, clock)
+        uut = DefaultApiConnector(sock, json_encoder, clock)
 
         uut.connect(hostname, port, response_buffer_size, timeout)
         response: dict = uut.send(request)
@@ -232,7 +232,7 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         json_encoder.encode.return_value = encoded_request
         sock.send.side_effect = [6, 4, 5]
 
-        uut = SslJsonSocketHandler(sock, json_encoder, clock)
+        uut = DefaultApiConnector(sock, json_encoder, clock)
 
         uut.connect(hostname, port, response_buffer_size, timeout)
         with self.assertRaises(CommunicationTimeout):
@@ -277,7 +277,7 @@ class TestSslJsonSocketHandler(unittest.TestCase):
             b""]
         json_encoder.decode.return_value = expected_response
 
-        uut = SslJsonSocketHandler(sock, json_encoder, clock)
+        uut = DefaultApiConnector(sock, json_encoder, clock)
 
         uut.connect(hostname, port, response_buffer_size, timeout)
 

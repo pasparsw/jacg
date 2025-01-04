@@ -12,9 +12,6 @@ LOGGER = getLogger("ApiClientGenerator")
 API_CLIENT_TEMPLATE_FILE_NAME: str = "api_client.template"
 API_CLIENT_TEMPLATE_FILE_PATH: str = os.path.join(TEMPLATES_PATH, API_CLIENT_TEMPLATE_FILE_NAME)
 GENERATED_API_CLIENT_FOLDER_NAME: str = "api_client"
-JSON_SOCKET_FILE_NAME: str = "json_socket.py"
-JSON_SOCKET_FILE_PATH: str = os.path.join(SRC_PATH, JSON_SOCKET_FILE_NAME)
-JSON_SOCKET_OUTPUT_PATH: str = os.path.join(GENERATED_API_CLIENT_FOLDER_NAME, JSON_SOCKET_FILE_NAME)
 
 
 class ApiClientGenerator(GeneratorInterface):
@@ -32,7 +29,6 @@ class ApiClientGenerator(GeneratorInterface):
         output_relative_path: str = os.path.join(GENERATED_API_CLIENT_FOLDER_NAME,
                                                  f"{camel_case_to_snake_case(api_model.name)}_client.py")
         output[output_relative_path] = empy_interpreter.expand(template, context)
-        output[JSON_SOCKET_OUTPUT_PATH] = load_file_content(JSON_SOCKET_FILE_PATH)
 
         LOGGER.info(f"Generating of API client done")
 

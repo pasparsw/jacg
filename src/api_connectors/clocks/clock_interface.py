@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.json_socket_handler.types import Timestamp
+from src.api_connectors.types import Timestamp
 
 
 class ClockInterface:

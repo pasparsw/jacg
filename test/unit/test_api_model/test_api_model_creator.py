@@ -18,7 +18,7 @@ class TestApiModelCreator(unittest.TestCase):
             "port": 1234,
             "response_buffer_size": 1024,
             "timeout": 5,
-            "ssl": False,
+            "connectors": False,
             "enums": {
                 "SomeEnum": {
                     "SomeEnumField1": "0",
@@ -75,7 +75,7 @@ class TestApiModelCreator(unittest.TestCase):
             "port": 1234,
             "response_buffer_size": 1024,
             "timeout": 5,
-            "ssl": False,
+            "connectors": False,
             "enums": {},
             "structs": {
                 "SomeStruct": {
@@ -132,7 +132,7 @@ class TestApiModelCreator(unittest.TestCase):
             "port": 1234,
             "response_buffer_size": 1024,
             "timeout": 5,
-            "ssl": False,
+            "connectors": False,
             "enums": {},
             "structs": {
                 "SomeStruct": {
@@ -189,7 +189,7 @@ class TestApiModelCreator(unittest.TestCase):
             "port": 1234,
             "response_buffer_size": 1024,
             "timeout": 5,
-            "ssl": False,
+            "connectors": False,
             "enums": {},
             "structs": {
                 "SomeStruct": {
@@ -252,7 +252,7 @@ class TestApiModelCreator(unittest.TestCase):
             "port": 1234,
             "response_buffer_size": 1024,
             "timeout": 5,
-            "ssl": False,
+            "connectors": False,
             "enums": {
                 "SomeEnum": {
                     "SomeEnumField1": "0",
@@ -322,7 +322,7 @@ class TestApiModelCreator(unittest.TestCase):
             "port": 1234,
             "response_buffer_size": 1024,
             "timeout": 5,
-            "ssl": False,
+            "connectors": False,
             "enums": {
                 "SomeEnum": {
                     "SomeEnumField1": "0",
@@ -386,7 +386,7 @@ class TestApiModelCreator(unittest.TestCase):
             "port": 1234,
             "response_buffer_size": 1024,
             "timeout": 5,
-            "ssl": False,
+            "connectors": False,
             "enums": {},
             "structs": {
                 "SomeStruct": {
@@ -443,7 +443,7 @@ class TestApiModelCreator(unittest.TestCase):
             "port": 1234,
             "response_buffer_size": 1024,
             "timeout": 5,
-            "ssl": False,
+            "connectors": False,
             "enums": {},
             "structs": {},
             "commands": {
