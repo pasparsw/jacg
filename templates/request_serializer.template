@@ -10,4 +10,4 @@ class @model.request.name@ Serializer:
     def serialize(request: @model.request.name@ ) -> dict:
         LOGGER.debug(f"Serializing @model.original_name request to dictionary")
 
-        return @model.get_request_serialization_recipe(struct_models, init_indentation_level=3)@
+        return @model.get_request_serialization_recipe(struct_models, enum_models, init_indentation_level=3)@

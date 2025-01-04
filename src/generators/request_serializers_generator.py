@@ -26,6 +26,7 @@ class RequestSerializersGenerator(GeneratorInterface):
             context: dict = {
                 "model": command_model,
                 "struct_models": api_model.structs,
+                "enum_models": api_model.enums,
             }
             output[self.__get_relative_output_path(command_model.original_name)] = empy_interpreter.expand(template,
                                                                                                            context)

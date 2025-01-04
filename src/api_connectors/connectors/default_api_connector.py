@@ -2,10 +2,11 @@ from logging import getLogger
 
 from src.api_connectors.clocks.clock_interface import ClockInterface
 from src.api_connectors.connectors.communication_timeout import CommunicationTimeout
+from src.api_connectors.json_encoders.json_decoding_failed import JsonDecodingFailed
 from src.api_connectors.json_encoders.json_encoder_interface import JsonEncoderInterface
 from src.api_connectors.connectors.api_connector_interface import ApiConnectorInterface, Seconds
 from src.api_connectors.sockets.socket_interface import SocketInterface
-from src.api_connectors.types import DecodedRequest, DecodedResponse, Timestamp
+from src.api_connectors.types import DecodedRequest, DecodedResponse, Timestamp, PreciseTimestamp
 
 LOGGER = getLogger("DefaultApiConnector")
 
@@ -47,30 +48,50 @@ class DefaultApiConnector(ApiConnectorInterface):
         start_timestamp: Timestamp = self.__clock.get_time()
         encoded_request: bytes = self.__json_encoder.encode(request)
         total_data_sent: int = 0
+        send_iterations: int = 0
+        send_start_timestamp: PreciseTimestamp = self.__clock.get_precise_time()
 
         while total_data_sent < len(encoded_request):
             self.__check_timeout(start_timestamp, "Failed to send JSON request!")
 
+            send_iterations += 1
             data_sent: int = self.__socket.send(encoded_request[total_data_sent:])
             total_data_sent += data_sent
 
             LOGGER.debug(f"Sent {data_sent} out of {len(encoded_request)} request bytes")
 
+        send_elapsed_time: PreciseTimestamp = self.__clock.get_precise_time() - send_start_timestamp
+        LOGGER.debug(f"Sent {total_data_sent} bytes in {send_elapsed_time}ms after {send_iterations} iterations")
+
         encoded_response: bytes = b""
         response_ready: bool = False
+        decoded_response: DecodedResponse = {}
+        receive_iterations: int = 0
+        receive_start_timestamp: PreciseTimestamp = self.__clock.get_precise_time()
 
         while not response_ready:
             self.__check_timeout(start_timestamp, "Failed to receive JSON response!")
 
+            receive_iterations += 1
             received_data: bytes = self.__socket.receive(self.__response_buffer_size)
             encoded_response += received_data
-            response_ready = (received_data == b"") or (len(received_data) < self.__response_buffer_size)
+            response_ready = len(received_data) < self.__response_buffer_size and len(received_data) != 0
 
             LOGGER.debug(f"Received {len(received_data)} response bytes")
 
-        LOGGER.debug(f"Complete response received ({len(encoded_response)} bytes)")
+            if response_ready:
+                try:
+                    decoded_response = self.__json_encoder.decode(encoded_response)
+                    response_ready = True
+                except JsonDecodingFailed as _:
+                    LOGGER.debug("Response not ready yet - listening for further data...")
+                    response_ready = False
 
-        return self.__json_encoder.decode(encoded_response)
+        receive_elapsed_time: PreciseTimestamp = self.__clock.get_precise_time() - receive_start_timestamp
+        LOGGER.debug(f"Complete response received ({len(encoded_response)} bytes) in {receive_elapsed_time}ms after "
+                     f"{receive_iterations} iterations")
+
+        return decoded_response
 
     def __check_timeout(self, start_timestamp: Timestamp, error_message: str) -> None:
         if self.__clock.get_time() - start_timestamp > self.__timeout:
