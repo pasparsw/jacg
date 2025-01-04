@@ -1,12 +1,12 @@
 import socket
 import ssl
 
-from logging import getLogger
+from logging import getLogger, exception
 
 from src.api_connectors.sockets.socket_interface import SocketInterface
 from src.api_connectors.types import Seconds
 
-LOGGER = getLogger("DefaultSocket")
+LOGGER = getLogger("SslSocket")
 
 
 class SslSocket(SocketInterface):
@@ -29,5 +29,9 @@ class SslSocket(SocketInterface):
         return self.__socket.send(data)
 
     def receive(self, buffer_size: int) -> bytes:
-        LOGGER.debug(f"Receiving buffer of {buffer_size} bytes")
-        return self.__socket.recv(buffer_size)
+        try:
+            LOGGER.debug(f"Receiving buffer of {buffer_size} bytes")
+            return self.__socket.recv(buffer_size)
+        except TimeoutError as e:
+            LOGGER.warning(f"{e} - returning empty byte string")
+            return b""

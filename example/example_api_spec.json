@@ -3,8 +3,8 @@
     "hostname": "some.hostname.com",
     "port": 1234,
     "response_buffer_size": 1024,
-    "timeout": 5,
-    "ssl": true,
+    "response_timeout": 5,
+    "socket_timeout": 3,
     "commands": {
         "someSimpleCommand": {
             "request": {

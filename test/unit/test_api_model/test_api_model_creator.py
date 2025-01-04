@@ -17,7 +17,8 @@ class TestApiModelCreator(unittest.TestCase):
             "hostname": "api.hostname",
             "port": 1234,
             "response_buffer_size": 1024,
-            "timeout": 5,
+            "response_timeout": 5,
+            "socket_timeout": 3,
             "connectors": False,
             "enums": {
                 "SomeEnum": {
@@ -40,8 +41,8 @@ class TestApiModelCreator(unittest.TestCase):
             hostname="api.hostname",
             port=1234,
             response_buffer_size=1024,
-            timeout=5,
-            ssl=False,
+            response_timeout=5,
+            socket_timeout=3,
             enums={
                 "SomeEnum": EnumModel(
                     name="SomeEnum",
@@ -74,7 +75,8 @@ class TestApiModelCreator(unittest.TestCase):
             "hostname": "api.hostname",
             "port": 1234,
             "response_buffer_size": 1024,
-            "timeout": 5,
+            "response_timeout": 5,
+            "socket_timeout": 3,
             "connectors": False,
             "enums": {},
             "structs": {
@@ -97,8 +99,8 @@ class TestApiModelCreator(unittest.TestCase):
             hostname="api.hostname",
             port=1234,
             response_buffer_size=1024,
-            timeout=5,
-            ssl=False,
+            response_timeout=5,
+            socket_timeout=3,
             enums={},
             structs={
                 "SomeStruct": StructModel(
@@ -131,7 +133,8 @@ class TestApiModelCreator(unittest.TestCase):
             "hostname": "api.hostname",
             "port": 1234,
             "response_buffer_size": 1024,
-            "timeout": 5,
+            "response_timeout": 5,
+            "socket_timeout": 3,
             "connectors": False,
             "enums": {},
             "structs": {
@@ -154,8 +157,8 @@ class TestApiModelCreator(unittest.TestCase):
             hostname="api.hostname",
             port=1234,
             response_buffer_size=1024,
-            timeout=5,
-            ssl=False,
+            response_timeout=5,
+            socket_timeout=3,
             enums={},
             structs={
                 "SomeStruct": StructModel(
@@ -188,7 +191,8 @@ class TestApiModelCreator(unittest.TestCase):
             "hostname": "api.hostname",
             "port": 1234,
             "response_buffer_size": 1024,
-            "timeout": 5,
+            "response_timeout": 5,
+            "socket_timeout": 3,
             "connectors": False,
             "enums": {},
             "structs": {
@@ -211,8 +215,8 @@ class TestApiModelCreator(unittest.TestCase):
             hostname="api.hostname",
             port=1234,
             response_buffer_size=1024,
-            timeout=5,
-            ssl=False,
+            response_timeout=5,
+            socket_timeout=3,
             enums={},
             structs={
                 "SomeStruct": StructModel(
@@ -251,7 +255,8 @@ class TestApiModelCreator(unittest.TestCase):
             "hostname": "api.hostname",
             "port": 1234,
             "response_buffer_size": 1024,
-            "timeout": 5,
+            "response_timeout": 5,
+            "socket_timeout": 3,
             "connectors": False,
             "enums": {
                 "SomeEnum": {
@@ -275,8 +280,8 @@ class TestApiModelCreator(unittest.TestCase):
             hostname="api.hostname",
             port=1234,
             response_buffer_size=1024,
-            timeout=5,
-            ssl=False,
+            response_timeout=5,
+            socket_timeout=3,
             enums={
                 "SomeEnum": EnumModel(
                     name="SomeEnum",
@@ -321,7 +326,8 @@ class TestApiModelCreator(unittest.TestCase):
             "hostname": "api.hostname",
             "port": 1234,
             "response_buffer_size": 1024,
-            "timeout": 5,
+            "response_timeout": 5,
+            "socket_timeout": 3,
             "connectors": False,
             "enums": {
                 "SomeEnum": {
@@ -343,8 +349,8 @@ class TestApiModelCreator(unittest.TestCase):
             hostname="api.hostname",
             port=1234,
             response_buffer_size=1024,
-            timeout=5,
-            ssl=False,
+            response_timeout=5,
+            socket_timeout=3,
             enums={
                 "SomeEnum": EnumModel(
                     name="SomeEnum",
@@ -385,7 +391,8 @@ class TestApiModelCreator(unittest.TestCase):
             "hostname": "api.hostname",
             "port": 1234,
             "response_buffer_size": 1024,
-            "timeout": 5,
+            "response_timeout": 5,
+            "socket_timeout": 3,
             "connectors": False,
             "enums": {},
             "structs": {
@@ -413,8 +420,8 @@ class TestApiModelCreator(unittest.TestCase):
             hostname="api.hostname",
             port=1234,
             response_buffer_size=1024,
-            timeout=5,
-            ssl=False,
+            response_timeout=5,
+            socket_timeout=3,
             enums={},
             structs={
                 "SomeStruct": StructModel(
@@ -442,7 +449,8 @@ class TestApiModelCreator(unittest.TestCase):
             "hostname": "api.hostname",
             "port": 1234,
             "response_buffer_size": 1024,
-            "timeout": 5,
+            "response_timeout": 5,
+            "socket_timeout": 3,
             "connectors": False,
             "enums": {},
             "structs": {},
@@ -477,8 +485,8 @@ class TestApiModelCreator(unittest.TestCase):
             hostname="api.hostname",
             port=1234,
             response_buffer_size=1024,
-            timeout=5,
-            ssl=False,
+            response_timeout=5,
+            socket_timeout=3,
             enums={},
             structs={
                 "SomeCommandRequest": StructModel(

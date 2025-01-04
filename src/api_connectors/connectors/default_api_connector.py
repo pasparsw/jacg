@@ -30,13 +30,14 @@ class DefaultApiConnector(ApiConnectorInterface):
     def clock(self) -> ClockInterface:
         return self.__clock
 
-    def connect(self, hostname: str, port: int, response_buffer_size: int, timeout: Seconds) -> None:
-        LOGGER.debug(f"Connecting default API connector to {hostname}:{port} with buffer size {response_buffer_size} "
-                     f"and timeout {timeout}")
+    def connect(self, hostname: str, port: int, response_buffer_size: int, response_timeout: Seconds,
+                socket_timeout: Seconds) -> None:
+        LOGGER.debug(f"Connecting default API connector to {hostname}:{port} with buffer size {response_buffer_size}, "
+                     f"response timeout {response_timeout}s and socket timeout {socket_timeout}")
 
-        self.__socket.connect(hostname, port, timeout)
+        self.__socket.connect(hostname, port, socket_timeout)
         self.__response_buffer_size = response_buffer_size
-        self.__timeout = timeout
+        self.__timeout = response_timeout
 
         LOGGER.debug(f"Default API connector connected")
 
@@ -63,7 +64,7 @@ class DefaultApiConnector(ApiConnectorInterface):
 
             received_data: bytes = self.__socket.receive(self.__response_buffer_size)
             encoded_response += received_data
-            response_ready = received_data == b""
+            response_ready = (received_data == b"") or (len(received_data) < self.__response_buffer_size)
 
             LOGGER.debug(f"Received {len(received_data)} response bytes")
 

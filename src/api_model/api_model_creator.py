@@ -18,8 +18,9 @@ class ApiModelCreator:
         LOGGER.info("Creating API model")
 
         model: ApiModel = ApiModel(name=api_spec["api_name"], hostname=api_spec["hostname"], port=api_spec["port"],
-                                   response_buffer_size=api_spec["response_buffer_size"], timeout=api_spec["timeout"],
-                                   ssl=api_spec["ssl"])
+                                   response_buffer_size=api_spec["response_buffer_size"],
+                                   response_timeout=api_spec["response_timeout"],
+                                   socket_timeout=api_spec["socket_timeout"])
 
         model.enums = self.__create_enum_models(api_spec["enums"])
         model.structs = self.__create_struct_models(api_spec["structs"], api_spec["commands"])

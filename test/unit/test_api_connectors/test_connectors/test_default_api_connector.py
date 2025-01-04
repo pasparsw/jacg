@@ -6,7 +6,7 @@ from src.api_connectors.connectors.default_api_connector import DefaultApiConnec
 from src.api_connectors.types import Seconds
 
 
-class TestSslJsonSocketHandler(unittest.TestCase):
+class TestDefaultApiConnector(unittest.TestCase):
     def test_connect_calls_proper_commands(self):
         sock = MagicMock(connect=Mock())
         json_encoder = MagicMock()
@@ -14,13 +14,14 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         hostname: str = "some.hostname.com"
         port: int = 1234
         response_buffer_size: int = 1024
-        timeout: Seconds = 10
+        response_timeout: Seconds = 10
+        socket_timeout: Seconds = 3
 
         uut = DefaultApiConnector(sock, json_encoder, clock)
 
-        uut.connect(hostname, port, response_buffer_size, timeout)
+        uut.connect(hostname, port, response_buffer_size, response_timeout, socket_timeout)
 
-        sock.connect.assert_called_once_with(hostname, port, timeout)
+        sock.connect.assert_called_once_with(hostname, port, socket_timeout)
 
     def test_successful_send_calls_proper_commands_for_small_request_and_small_response(self):
         sock = MagicMock(connect=Mock(), send=Mock(), receive=Mock())
@@ -29,7 +30,8 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         hostname: str = "some.hostname.com"
         port: int = 1234
         response_buffer_size: int = 1024
-        timeout: Seconds = 10
+        response_timeout: Seconds = 10
+        socket_timeout: Seconds = 3
         request: dict = {
             "arg_1": "value_1",
             "arg_2": "value_2",
@@ -44,25 +46,22 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         clock.get_time.side_effect = [0, 1, 2, 3]
         json_encoder.encode.return_value = encoded_request
         sock.send.return_value = len(encoded_request)
-        sock.receive.side_effect = [encoded_response, b""]
+        sock.receive.return_value = encoded_response
         json_encoder.decode.return_value = expected_response
 
         uut = DefaultApiConnector(sock, json_encoder, clock)
 
-        uut.connect(hostname, port, response_buffer_size, timeout)
+        uut.connect(hostname, port, response_buffer_size, response_timeout, socket_timeout)
         response: dict = uut.send(request)
 
-        sock.connect.assert_called_once_with(hostname, port, timeout)
+        sock.connect.assert_called_once_with(hostname, port, socket_timeout)
 
         json_encoder.encode.assert_called_once_with(request)
         sock.send.assert_called_once_with(encoded_request)
-        sock.receive.assert_has_calls([
-            call(response_buffer_size),
-            call(response_buffer_size),
-        ])
+        sock.receive.assert_called_once_with(response_buffer_size)
         json_encoder.decode.assert_called_once_with(encoded_response)
 
-        self.assertEqual(clock.get_time.call_count, 4)
+        self.assertEqual(clock.get_time.call_count, 3)
         self.assertEqual(response, expected_response)
 
     def test_successful_send_calls_proper_commands_for_multi_chunk_request_and_small_response(self):
@@ -72,7 +71,8 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         hostname: str = "some.hostname.com"
         port: int = 1234
         response_buffer_size: int = 1024
-        timeout: Seconds = 10
+        response_timeout: Seconds = 10
+        socket_timeout: Seconds = 3
         request: dict = {
             "arg_1": "value_1",
             "arg_2": "value_2",
@@ -92,10 +92,10 @@ class TestSslJsonSocketHandler(unittest.TestCase):
 
         uut = DefaultApiConnector(sock, json_encoder, clock)
 
-        uut.connect(hostname, port, response_buffer_size, timeout)
+        uut.connect(hostname, port, response_buffer_size, response_timeout, socket_timeout)
         response: dict = uut.send(request)
 
-        sock.connect.assert_called_once_with(hostname, port, timeout)
+        sock.connect.assert_called_once_with(hostname, port, socket_timeout)
 
         json_encoder.encode.assert_called_once_with(request)
         sock.send.assert_has_calls([
@@ -103,13 +103,10 @@ class TestSslJsonSocketHandler(unittest.TestCase):
             call(encoded_request[6:]),
             call(encoded_request[10:]),
         ])
-        sock.receive.assert_has_calls([
-            call(response_buffer_size),
-            call(response_buffer_size)
-        ])
+        sock.receive.assert_called_once_with(response_buffer_size)
         json_encoder.decode.assert_called_once_with(encoded_response)
 
-        self.assertEqual(clock.get_time.call_count, 6)
+        self.assertEqual(clock.get_time.call_count, 5)
         self.assertEqual(response, expected_response)
 
     def test_successful_send_calls_proper_commands_for_small_request_and_multi_chunk_response(self):
@@ -118,8 +115,9 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         clock = MagicMock(get_time=Mock())
         hostname: str = "some.hostname.com"
         port: int = 1234
-        response_buffer_size: int = 1024
-        timeout: Seconds = 10
+        response_buffer_size: int = 6
+        response_timeout: Seconds = 10
+        socket_timeout: Seconds = 3
         request: dict = {
             "arg_1": "value_1",
             "arg_2": "value_2",
@@ -136,17 +134,17 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         sock.send.return_value = len(encoded_request)
         sock.receive.side_effect = [
             encoded_response[:6],
-            encoded_response[6:10],
-            encoded_response[10:],
-            b""]
+            encoded_response[6:12],
+            encoded_response[12:]
+        ]
         json_encoder.decode.return_value = expected_response
 
         uut = DefaultApiConnector(sock, json_encoder, clock)
 
-        uut.connect(hostname, port, response_buffer_size, timeout)
+        uut.connect(hostname, port, response_buffer_size, response_timeout, socket_timeout)
         response: dict = uut.send(request)
 
-        sock.connect.assert_called_once_with(hostname, port, timeout)
+        sock.connect.assert_called_once_with(hostname, port, socket_timeout)
 
         json_encoder.encode.assert_called_once_with(request)
         sock.send.assert_called_once_with(encoded_request)
@@ -154,11 +152,10 @@ class TestSslJsonSocketHandler(unittest.TestCase):
             call(response_buffer_size),
             call(response_buffer_size),
             call(response_buffer_size),
-            call(response_buffer_size),
         ])
         json_encoder.decode.assert_called_once_with(encoded_response)
 
-        self.assertEqual(clock.get_time.call_count, 6)
+        self.assertEqual(clock.get_time.call_count, 5)
         self.assertEqual(response, expected_response)
 
     def test_successful_send_calls_proper_commands_for_multi_chunk_request_and_multi_chunk_response(self):
@@ -167,8 +164,9 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         clock = MagicMock(get_time=Mock())
         hostname: str = "some.hostname.com"
         port: int = 1234
-        response_buffer_size: int = 1024
-        timeout: Seconds = 10
+        response_buffer_size: int = 6
+        response_timeout: Seconds = 10
+        socket_timeout: Seconds = 3
         request: dict = {
             "arg_1": "value_1",
             "arg_2": "value_2",
@@ -185,17 +183,17 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         sock.send.side_effect = [6, 4, 5]
         sock.receive.side_effect = [
             encoded_response[:6],
-            encoded_response[6:10],
-            encoded_response[10:],
-            b""]
+            encoded_response[6:12],
+            encoded_response[12:],
+        ]
         json_encoder.decode.return_value = expected_response
 
         uut = DefaultApiConnector(sock, json_encoder, clock)
 
-        uut.connect(hostname, port, response_buffer_size, timeout)
+        uut.connect(hostname, port, response_buffer_size, response_timeout, socket_timeout)
         response: dict = uut.send(request)
 
-        sock.connect.assert_called_once_with(hostname, port, timeout)
+        sock.connect.assert_called_once_with(hostname, port, socket_timeout)
 
         json_encoder.encode.assert_called_once_with(request)
         sock.send.assert_has_calls([
@@ -207,11 +205,10 @@ class TestSslJsonSocketHandler(unittest.TestCase):
             call(response_buffer_size),
             call(response_buffer_size),
             call(response_buffer_size),
-            call(response_buffer_size),
         ])
         json_encoder.decode.assert_called_once_with(encoded_response)
 
-        self.assertEqual(clock.get_time.call_count, 8)
+        self.assertEqual(clock.get_time.call_count, 7)
         self.assertEqual(response, expected_response)
 
     def test_send_raises_proper_exception_when_send_timeout(self):
@@ -221,7 +218,8 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         hostname: str = "some.hostname.com"
         port: int = 1234
         response_buffer_size: int = 1024
-        timeout: Seconds = 10
+        response_timeout: Seconds = 10
+        socket_timeout: Seconds = 3
         request: dict = {
             "arg_1": "value_1",
             "arg_2": "value_2",
@@ -234,11 +232,11 @@ class TestSslJsonSocketHandler(unittest.TestCase):
 
         uut = DefaultApiConnector(sock, json_encoder, clock)
 
-        uut.connect(hostname, port, response_buffer_size, timeout)
+        uut.connect(hostname, port, response_buffer_size, response_timeout, socket_timeout)
         with self.assertRaises(CommunicationTimeout):
             uut.send(request)
 
-        sock.connect.assert_called_once_with(hostname, port, timeout)
+        sock.connect.assert_called_once_with(hostname, port, socket_timeout)
 
         json_encoder.encode.assert_called_once_with(request)
         sock.send.assert_has_calls([
@@ -254,8 +252,9 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         clock = MagicMock(get_time=Mock())
         hostname: str = "some.hostname.com"
         port: int = 1234
-        response_buffer_size: int = 1024
-        timeout: Seconds = 10
+        response_buffer_size: int = 6
+        response_timeout: Seconds = 10
+        socket_timeout: Seconds = 3
         request: dict = {
             "arg_1": "value_1",
             "arg_2": "value_2",
@@ -272,19 +271,19 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         sock.send.return_value = len(encoded_request)
         sock.receive.side_effect = [
             encoded_response[:6],
-            encoded_response[6:10],
-            encoded_response[10:],
-            b""]
+            encoded_response[6:12],
+            encoded_response[12:],
+        ]
         json_encoder.decode.return_value = expected_response
 
         uut = DefaultApiConnector(sock, json_encoder, clock)
 
-        uut.connect(hostname, port, response_buffer_size, timeout)
+        uut.connect(hostname, port, response_buffer_size, response_timeout, socket_timeout)
 
         with self.assertRaises(CommunicationTimeout):
             uut.send(request)
 
-        sock.connect.assert_called_once_with(hostname, port, timeout)
+        sock.connect.assert_called_once_with(hostname, port, socket_timeout)
 
         json_encoder.encode.assert_called_once_with(request)
         sock.send.assert_called_once_with(encoded_request)
@@ -294,3 +293,52 @@ class TestSslJsonSocketHandler(unittest.TestCase):
         ])
 
         self.assertEqual(clock.get_time.call_count, 5)
+
+    def test_successful_send_calls_proper_commands_for_small_request_and_multi_chunk_response_when_socket_timeout(self):
+        sock = MagicMock(connect=Mock(), send=Mock(), receive=Mock())
+        json_encoder = MagicMock(encode=Mock())
+        clock = MagicMock(get_time=Mock())
+        hostname: str = "some.hostname.com"
+        port: int = 1234
+        response_buffer_size: int = 8
+        response_timeout: Seconds = 10
+        socket_timeout: Seconds = 3
+        request: dict = {
+            "arg_1": "value_1",
+            "arg_2": "value_2",
+        }
+        encoded_request: bytes = b"encoded_request"
+        encoded_response: bytes = b"encoded_response"
+        expected_response: dict = {
+            "arg_3": "value_3",
+            "arg_4": "value_4",
+        }
+
+        clock.get_time.side_effect = [0, 1, 2, 3, 4, 5]
+        json_encoder.encode.return_value = encoded_request
+        sock.send.return_value = len(encoded_request)
+        sock.receive.side_effect = [
+            encoded_response[:8],
+            encoded_response[8:],
+            b"",
+        ]
+        json_encoder.decode.return_value = expected_response
+
+        uut = DefaultApiConnector(sock, json_encoder, clock)
+
+        uut.connect(hostname, port, response_buffer_size, response_timeout, socket_timeout)
+        response: dict = uut.send(request)
+
+        sock.connect.assert_called_once_with(hostname, port, socket_timeout)
+
+        json_encoder.encode.assert_called_once_with(request)
+        sock.send.assert_called_once_with(encoded_request)
+        sock.receive.assert_has_calls([
+            call(response_buffer_size),
+            call(response_buffer_size),
+            call(response_buffer_size),
+        ])
+        json_encoder.decode.assert_called_once_with(encoded_response)
+
+        self.assertEqual(clock.get_time.call_count, 5)
+        self.assertEqual(response, expected_response)

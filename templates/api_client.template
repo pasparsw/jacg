@@ -1,7 +1,7 @@
 from logging import getLogger
 from typing import Callable
 
-from api_client.json_socket import JsonSocket
+from api_client.api_connectors.connectors.api_connector_interface import ApiConnectorInterface
 
 @[for command_model in model.commands]@
 from @command_model.request.import_path import @command_model.request.name
@@ -25,15 +25,16 @@ def log_debug(message: str, is_silent: bool) -> None:
 
 
 class @snake_case_to_camel_case(model.name)@ Client:
-    def __init__(self, response_validation_cb: Callable[[dict], None] = None):
+    def __init__(self, api_connector: ApiConnectorInterface, response_validation_cb: Callable[[dict], None] = None):
         self.__validate_response: Callable[[dict], None] = response_validation_cb
-        self.__json_socket: JsonSocket = JsonSocket(
-            hostname="@model.hostname@ ",
-            port=@model.port@ ,
-            response_buffer_size=@model.response_buffer_size@ ,
-            timeout_s=@model.timeout@ ,
-            use_ssl=@model.ssl@ ,
-        )
+        self.__api_connector: ApiConnectorInterface = api_connector
+
+    def connect(self) -> None:
+        self.__api_connector.connect(hostname="@model.hostname@ ",
+                                     port=@model.port@ ,
+                                     response_buffer_size=@model.response_buffer_size@ ,
+                                     response_timeout=@model.response_timeout@ ,
+                                     socket_timeout=@model.socket_timeout@ ,)
 
 @[for command_model in model.commands]@
     def @command_model.py_function_name@ (self, request: @command_model.request.name@ ) -> @command_model.response.name@ :
@@ -41,7 +42,7 @@ class @snake_case_to_camel_case(model.name)@ Client:
         serialized_request: dict = @command_model.request.name@ Serializer.serialize(request)
 
         log_debug(f"Sending request {serialized_request}", is_silent=@command_model.is_silent@ )
-        serialized_response: dict = self.__json_socket.send(serialized_request)
+        serialized_response: dict = self.__api_connector.send(serialized_request)
 
         log_debug(f"Received response: {serialized_response}", is_silent=@command_model.is_silent@ )
         self.__call_response_validation_cb(serialized_response)
