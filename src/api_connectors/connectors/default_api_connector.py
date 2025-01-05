@@ -1,12 +1,12 @@
 from logging import getLogger
 
-from api_connectors.clocks.clock_interface import ClockInterface
-from api_connectors.connectors.communication_timeout import CommunicationTimeout
-from api_connectors.json_encoders.json_decoding_failed import JsonDecodingFailed
-from api_connectors.json_encoders.json_encoder_interface import JsonEncoderInterface
-from api_connectors.connectors.api_connector_interface import ApiConnectorInterface, Seconds
-from api_connectors.sockets.socket_interface import SocketInterface
-from api_connectors.types import DecodedRequest, DecodedResponse, Timestamp, PreciseTimestamp
+from ..clocks.clock_interface import ClockInterface
+from .communication_timeout import CommunicationTimeout
+from ..json_encoders.json_decoding_failed import JsonDecodingFailed
+from ..json_encoders.json_encoder_interface import JsonEncoderInterface
+from .api_connector_interface import ApiConnectorInterface, Seconds
+from ..sockets.socket_interface import SocketInterface
+from ..types import DecodedRequest, DecodedResponse, Timestamp, PreciseTimestamp
 
 LOGGER = getLogger("DefaultApiConnector")
 
@@ -36,11 +36,13 @@ class DefaultApiConnector(ApiConnectorInterface):
         LOGGER.debug(f"Connecting default API connector to {hostname}:{port} with buffer size {response_buffer_size}, "
                      f"response timeout {response_timeout}s and socket timeout {socket_timeout}")
 
+        start_timestamp: PreciseTimestamp = self.__clock.get_precise_time()
+
         self.__socket.connect(hostname, port, socket_timeout)
         self.__response_buffer_size = response_buffer_size
         self.__timeout = response_timeout
 
-        LOGGER.debug(f"Default API connector connected")
+        LOGGER.debug(f"Default API connector connected in {self.__clock.get_precise_time() - start_timestamp}ms")
 
     def send(self, request: DecodedRequest) -> DecodedResponse:
         LOGGER.debug(f"Sending request")

@@ -1,7 +1,11 @@
 from dataclasses import dataclass
 
 @[for dependency_name, dependency_model in model.dependencies.items()]@
+@[if "typing" not in dependency_model.import_path]@
+from ..@dependency_model.import_path import @dependency_name
+@[else]@
 from @dependency_model.import_path import @dependency_name
+@[end if]@
 @[end for]
 
 @@dataclass

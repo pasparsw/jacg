@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from @model.request.import_path import @model.request.name
+from ..@model.request.import_path import @model.request.name
 
 LOGGER = getLogger("@model.request.name@ Serializer")
 

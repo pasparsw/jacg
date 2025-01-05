@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from api_connectors.types import Seconds, DecodedRequest, DecodedResponse
+from ..types import Seconds, DecodedRequest, DecodedResponse
 
 
 class ApiConnectorInterface:

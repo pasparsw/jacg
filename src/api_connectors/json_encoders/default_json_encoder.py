@@ -2,8 +2,8 @@ import json
 
 from logging import getLogger
 
-from api_connectors.json_encoders.json_decoding_failed import JsonDecodingFailed
-from api_connectors.json_encoders.json_encoder_interface import JsonEncoderInterface
+from .json_decoding_failed import JsonDecodingFailed
+from .json_encoder_interface import JsonEncoderInterface
 
 LOGGER = getLogger("DefaultJsonEncoder")
 

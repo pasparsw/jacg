@@ -2,8 +2,8 @@ import socket
 
 from logging import getLogger
 
-from api_connectors.sockets.socket_interface import SocketInterface
-from api_connectors.types import Seconds
+from .socket_interface import SocketInterface
+from ..types import Seconds
 
 LOGGER = getLogger("DefaultSocket")
 

@@ -1,19 +1,19 @@
 from logging import getLogger
 from typing import Callable
 
-from api_connectors.connectors.api_connector_interface import ApiConnectorInterface
+from ..api_connectors.connectors.api_connector_interface import ApiConnectorInterface
 
 @[for command_model in model.commands]@
-from @command_model.request.import_path import @command_model.request.name
-from @command_model.response.import_path import @command_model.response.name
+from ..@command_model.request.import_path import @command_model.request.name
+from ..@command_model.response.import_path import @command_model.response.name
 @[end for]
 # request serializers
 @[for command_model in model.commands]@
-from request_serializers.@camel_case_to_snake_case(command_model.request.name)@ _serializer import @command_model.request.name@ Serializer
+from ..request_serializers.@camel_case_to_snake_case(command_model.request.name)@ _serializer import @command_model.request.name@ Serializer
 @[end for]
 # response deserializers
 @[for command_model in model.commands]@
-from response_deserializers.@camel_case_to_snake_case(command_model.response.name)@ _deserializer import @command_model.response.name@ Deserializer
+from ..response_deserializers.@camel_case_to_snake_case(command_model.response.name)@ _deserializer import @command_model.response.name@ Deserializer
 @[end for]
 
 LOGGER = getLogger("@snake_case_to_camel_case(model.name)@ Client")
@@ -22,6 +22,10 @@ def log_debug(message: str, is_silent: bool) -> None:
     if is_silent:
         return
     LOGGER.debug(message)
+
+
+class InvalidRequestType(Exception):
+    pass
 
 
 class @snake_case_to_camel_case(model.name)@ Client:
@@ -38,6 +42,10 @@ class @snake_case_to_camel_case(model.name)@ Client:
 
 @[for command_model in model.commands]@
     def @command_model.py_function_name@ (self, request: @command_model.request.name@ ) -> @command_model.response.name@ :
+        if not isinstance(request, @command_model.request.name@ ):
+            raise InvalidRequestType(f"Command @command_model.py_function_name@  requires request of type @command_model.request.name@ , but the request of type "
+                                     f"{type(request)} has been provided!")
+
         log_debug(f"Serializing request: {request}", is_silent=@command_model.is_silent@ )
         serialized_request: dict = @command_model.request.name@ Serializer.serialize(request)
 

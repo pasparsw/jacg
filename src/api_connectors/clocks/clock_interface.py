@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from api_connectors.types import Timestamp, PreciseTimestamp
+from ..types import Timestamp, PreciseTimestamp
 
 
 class ClockInterface:
