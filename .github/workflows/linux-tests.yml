@@ -16,5 +16,8 @@ jobs:
     - name: Setup
       run: ${{github.workspace}}/scripts/install.sh
 
-    - name: Run tests
-      run: ${{github.workspace}}/venv/bin/python3 -m unittest discover ${{github.workspace}}/test
+    - name: Run unit tests
+      run: ${{github.workspace}}/venv/bin/python3 -m unittest discover ${{github.workspace}}/test/unit
+
+    - name: Run integration tests
+      run: ${{github.workspace}}/venv/bin/python3 -m unittest discover ${{github.workspace}}/test/integration

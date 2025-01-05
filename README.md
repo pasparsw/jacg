@@ -76,7 +76,7 @@ include(FetchContent)
 FetchContent_Declare(
     Jacg
     GIT_REPOSITORY git@github.com:pasparsw/jacg.git
-    GIT_TAG <version_tag>
+    GIT_TAG v2.0
 )
 
 FetchContent_MakeAvailable(Jacg)
@@ -101,8 +101,8 @@ JSON file with the API specification must have the following schema:
     "hostname": "some.hostname.com",
     "port": 1234,
     "response_buffer_size": 1024,
-    "timeout": 5,
-    "ssl": true,
+    "response_timeout": 5,
+    "socket_timeout": 3,
     "commands": {
         "CommandName": {
             "request": {
@@ -137,8 +137,8 @@ JSON file with the API specification must have the following schema:
 * _hostname_ - API hostname
 * _port_ - API port number
 * _response_buffer_size_ - size of the incoming data buffer
-* _timeout_ - timeout in seconds for the API response to be received
-* _ssl_ - if set to true, SSL will be used during the communication
+* _response_timeout_ - timeout in seconds for the entire API command including sending request and receiving response
+* _socket_timeout_ - timeout on the socket when receiving a single response chunk
 * _commands_ - dictionary where keys are command names and values are dictionaries specifying:
   * request structure
   * response structure
