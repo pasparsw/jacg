@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from structs.my_struct import MyStruct
+from ..structs.my_struct import MyStruct
 
 
 @dataclass

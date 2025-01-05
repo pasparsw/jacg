@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from structs.some_simple_command_response import SomeSimpleCommandResponse
+from ..structs.some_simple_command_response import SomeSimpleCommandResponse
 
 
 
@@ -9,7 +9,7 @@ LOGGER = getLogger("SomeSimpleCommandResponseDeserializer")
 
 class SomeSimpleCommandResponseDeserializer:
     @staticmethod
-    def deserialize(response: SomeSimpleCommandResponse) -> dict:
+    def deserialize(response: dict) -> SomeSimpleCommandResponse:
         LOGGER.debug(f"Deserializing someSimpleCommand response from dictionary")
 
         return SomeSimpleCommandResponse(

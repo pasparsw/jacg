@@ -1,0 +1,2 @@
+class CommunicationTimeout(Exception):
+    pass

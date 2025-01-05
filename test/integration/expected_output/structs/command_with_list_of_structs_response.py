@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from typing import List
-from structs.my_other_struct import MyOtherStruct
+from ..structs.my_other_struct import MyOtherStruct
 
 
 @dataclass

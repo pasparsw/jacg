@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from structs.some_simple_command_request import SomeSimpleCommandRequest
+from ..structs.some_simple_command_request import SomeSimpleCommandRequest
 
 LOGGER = getLogger("SomeSimpleCommandRequestSerializer")
 

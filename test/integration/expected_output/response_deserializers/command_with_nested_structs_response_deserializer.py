@@ -1,10 +1,10 @@
 from logging import getLogger
 
-from structs.command_with_nested_structs_response import CommandWithNestedStructsResponse
+from ..structs.command_with_nested_structs_response import CommandWithNestedStructsResponse
 
-from structs.my_struct import MyStruct
-from structs.my_other_struct import MyOtherStruct
-from structs.my_complex_struct import MyComplexStruct
+from ..structs.my_struct import MyStruct
+from ..structs.my_other_struct import MyOtherStruct
+from ..structs.my_complex_struct import MyComplexStruct
 
 
 LOGGER = getLogger("CommandWithNestedStructsResponseDeserializer")
@@ -12,7 +12,7 @@ LOGGER = getLogger("CommandWithNestedStructsResponseDeserializer")
 
 class CommandWithNestedStructsResponseDeserializer:
     @staticmethod
-    def deserialize(response: CommandWithNestedStructsResponse) -> dict:
+    def deserialize(response: dict) -> CommandWithNestedStructsResponse:
         LOGGER.debug(f"Deserializing commandWithNestedStructs response from dictionary")
 
         return CommandWithNestedStructsResponse(

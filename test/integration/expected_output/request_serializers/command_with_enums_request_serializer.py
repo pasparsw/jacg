@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from structs.command_with_enums_request import CommandWithEnumsRequest
+from ..structs.command_with_enums_request import CommandWithEnumsRequest
 
 LOGGER = getLogger("CommandWithEnumsRequestSerializer")
 
@@ -11,5 +11,5 @@ class CommandWithEnumsRequestSerializer:
         LOGGER.debug(f"Serializing commandWithEnums request to dictionary")
 
         return {
-            'arg': request.arg,
+            'arg': request.arg.value,
         }

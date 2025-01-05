@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from structs.my_complex_struct import MyComplexStruct
+from ..structs.my_complex_struct import MyComplexStruct
 
 
 @dataclass
