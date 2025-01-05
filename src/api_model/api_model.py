@@ -12,8 +12,8 @@ class ApiModel:
     hostname: str
     port: int
     response_buffer_size: int
-    timeout: int
-    ssl: bool
+    response_timeout: int
+    socket_timeout: int
     enums: Dict[EnumName, EnumModel] = field(default_factory=lambda: {})
     structs: Dict[StructName, StructModel] = field(default_factory=lambda: {})
     commands: List[CommandModel] = field(default_factory=lambda: [])

@@ -1,8 +1,8 @@
 from logging import getLogger
 
-from structs.command_with_struct_arg_response import CommandWithStructArgResponse
+from ..structs.command_with_struct_arg_response import CommandWithStructArgResponse
 
-from structs.my_other_struct import MyOtherStruct
+from ..structs.my_other_struct import MyOtherStruct
 
 
 LOGGER = getLogger("CommandWithStructArgResponseDeserializer")
@@ -10,7 +10,7 @@ LOGGER = getLogger("CommandWithStructArgResponseDeserializer")
 
 class CommandWithStructArgResponseDeserializer:
     @staticmethod
-    def deserialize(response: CommandWithStructArgResponse) -> dict:
+    def deserialize(response: dict) -> CommandWithStructArgResponse:
         LOGGER.debug(f"Deserializing commandWithStructArg response from dictionary")
 
         return CommandWithStructArgResponse(

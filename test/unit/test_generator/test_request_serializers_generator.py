@@ -25,6 +25,7 @@ class TestRequestSerializersGenerator(unittest.TestCase):
         some_other_command: CommandModel = CommandModel(name="SomeOtherCommand", request=some_other_struct,
                                                         response=some_struct, silent=False)
         api_model = MagicMock(
+            enums={},
             structs={
                 "SomeStruct": some_struct,
                 "SomeOtherStruct": some_other_struct,
@@ -51,8 +52,8 @@ class TestRequestSerializersGenerator(unittest.TestCase):
 
         load_file_content_mock.assert_called_once_with(REQUEST_SERIALIZER_TEMPLATE_FILE_PATH)
         empy_interpreter.expand.assert_has_calls([
-            call(template, {"model": some_command, "struct_models": api_model.structs}),
-            call(template, {"model": some_other_command, "struct_models": api_model.structs}),
+            call(template, {"model": some_command, "struct_models": api_model.structs, "enum_models": api_model.enums}),
+            call(template, {"model": some_other_command, "struct_models": api_model.structs, "enum_models": api_model.enums}),
         ])
 
         self.assertDictEqual(output, expected_output)

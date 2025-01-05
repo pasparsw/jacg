@@ -1,11 +1,5 @@
-import sys
-import os
-
-from src.paths import REPO_PATH
-
-sys.path.append(os.path.join(REPO_PATH, "example", "output"))
-
 from output.api_client.my_api_client import MyApiClient
+from output.api_connectors.api_connector_factory import ApiConnectorFactory, ApiConnectorType
 
 from output.structs.some_simple_command_request import SomeSimpleCommandRequest
 from output.structs.some_simple_command_response import SomeSimpleCommandResponse
@@ -29,9 +23,16 @@ from output.structs.command_with_nested_structs_request import CommandWithNested
 from output.structs.command_with_nested_structs_response import CommandWithNestedStructsResponse, MyComplexStruct
 
 
+def custom_response_validation_callback(response_data: dict) -> None:
+    print(f"Validating response: {response_data}")
+
 
 if __name__ == "__main__":
-    api_client = MyApiClient()
+    api_connector = ApiConnectorFactory.create(ApiConnectorType.SSL)
+    api_client = MyApiClient(api_connector, response_validation_cb=custom_response_validation_callback)
+
+    api_client.connect()
+
     # someSimpleCommand
     request = SomeSimpleCommandRequest(
         arg=12

@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
-from enums.my_other_enum import MyOtherEnum
+from typing import List
+from ..enums.my_other_enum import MyOtherEnum
 
 
 @dataclass
 class CommandWithEnumsResponse:
-    returned_value: MyOtherEnum
+    returned_value: List[MyOtherEnum]
