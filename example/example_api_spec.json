@@ -31,7 +31,7 @@
                 "arg": "MyEnum"
             },
             "response": {
-                "returned_value": "MyOtherEnum"
+                "returned_value": "List[MyOtherEnum]"
             },
             "silent": false
         },
