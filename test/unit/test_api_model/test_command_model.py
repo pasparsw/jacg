@@ -3,6 +3,8 @@ from copy import deepcopy
 from typing import Dict
 
 from src.api_model.command_model import CommandModel
+from src.api_model.enum_field_model import EnumFieldModel
+from src.api_model.enum_model import EnumModel, EnumName
 from src.api_model.struct_field_model import StructFieldModel
 from src.api_model.struct_model import StructModel, StructName
 
@@ -20,6 +22,7 @@ class TestCommandModel(unittest.TestCase):
         struct_models: Dict[StructName, StructModel] = {
             "RequestStruct": request_struct,
         }
+        enum_models: Dict[EnumName, EnumModel] = {}
         model: CommandModel = CommandModel(name="SomeCommand",
                                            request=request_struct,
                                            response=StructModel(name="NotImportant", fields=[]),
@@ -31,7 +34,44 @@ class TestCommandModel(unittest.TestCase):
     'Field3': request.Field3,
 }
 """
-        recipe: str = model.get_request_serialization_recipe(struct_models, init_indentation_level=1)
+        recipe: str = model.get_request_serialization_recipe(struct_models, enum_models, init_indentation_level=1)
+
+        self.assertEqual(recipe, expected_recipe)
+
+    def test_get_request_serialization_recipe_for_request_with_enum(self):
+        request_struct: StructModel = StructModel(
+            name="RequestStruct",
+            fields=[
+                StructFieldModel(name="Field1", type="int"),
+                StructFieldModel(name="Field2", type="SomeEnum"),
+                StructFieldModel(name="Field3", type="float"),
+            ]
+        )
+        struct_models: Dict[StructName, StructModel] = {
+            "RequestStruct": request_struct,
+        }
+        enum_models: Dict[EnumName, EnumModel] = {
+            "SomeEnum": EnumModel(
+                name="SomeEnum",
+                fields=[
+                    EnumFieldModel("enum_field_1", "value1"),
+                    EnumFieldModel("enum_field_2", "value2"),
+                    EnumFieldModel("enum_field_3", "value3"),
+                ]
+            )
+        }
+        model: CommandModel = CommandModel(name="SomeCommand",
+                                           request=request_struct,
+                                           response=StructModel(name="NotImportant", fields=[]),
+                                           silent=False)
+        expected_recipe: str = \
+"""{
+    'Field1': request.Field1,
+    'Field2': request.Field2.value,
+    'Field3': request.Field3,
+}
+"""
+        recipe: str = model.get_request_serialization_recipe(struct_models, enum_models, init_indentation_level=1)
 
         self.assertEqual(recipe, expected_recipe)
 
@@ -47,6 +87,7 @@ class TestCommandModel(unittest.TestCase):
         struct_models: Dict[StructName, StructModel] = {
             "RequestStruct": request_struct,
         }
+        enum_models: Dict[EnumName, EnumModel] = {}
         model: CommandModel = CommandModel(name="SomeCommand",
                                            request=request_struct,
                                            response=StructModel(name="NotImportant", fields=[]),
@@ -58,7 +99,44 @@ class TestCommandModel(unittest.TestCase):
     'Field3': request.Field3,
 }
 """
-        recipe: str = model.get_request_serialization_recipe(struct_models, init_indentation_level=1)
+        recipe: str = model.get_request_serialization_recipe(struct_models, enum_models, init_indentation_level=1)
+
+        self.assertEqual(recipe, expected_recipe)
+
+    def test_get_request_serialization_recipe_for_request_with_list_of_enums(self):
+        request_struct: StructModel = StructModel(
+            name="RequestStruct",
+            fields=[
+                StructFieldModel(name="Field1", type="List[SomeEnum]"),
+                StructFieldModel(name="Field2", type="str"),
+                StructFieldModel(name="Field3", type="float"),
+            ]
+        )
+        struct_models: Dict[StructName, StructModel] = {
+            "RequestStruct": request_struct,
+        }
+        enum_models: Dict[EnumName, EnumModel] = {
+            "SomeEnum": EnumModel(
+                name="SomeEnum",
+                fields=[
+                    EnumFieldModel("enum_field_1", "value1"),
+                    EnumFieldModel("enum_field_2", "value2"),
+                    EnumFieldModel("enum_field_3", "value3"),
+                ]
+            )
+        }
+        model: CommandModel = CommandModel(name="SomeCommand",
+                                           request=request_struct,
+                                           response=StructModel(name="NotImportant", fields=[]),
+                                           silent=False)
+        expected_recipe: str = \
+"""{
+    'Field1': [element.value for element in request.Field1],
+    'Field2': request.Field2,
+    'Field3': request.Field3,
+}
+"""
+        recipe: str = model.get_request_serialization_recipe(struct_models, enum_models, init_indentation_level=1)
 
         self.assertEqual(recipe, expected_recipe)
 
@@ -85,6 +163,7 @@ class TestCommandModel(unittest.TestCase):
             "RequestStruct": request_struct,
             "DependencyStruct": dependency
         }
+        enum_models: Dict[EnumName, EnumModel] = {}
         model: CommandModel = CommandModel(name="SomeCommand",
                                            request=request_struct,
                                            response=StructModel(name="NotImportant", fields=[]),
@@ -99,7 +178,7 @@ class TestCommandModel(unittest.TestCase):
     'Field3': request.Field3,
 }
 """
-        recipe: str = model.get_request_serialization_recipe(struct_models, init_indentation_level=1)
+        recipe: str = model.get_request_serialization_recipe(struct_models, enum_models, init_indentation_level=1)
 
         self.assertEqual(recipe, expected_recipe)
 
@@ -126,6 +205,7 @@ class TestCommandModel(unittest.TestCase):
             "RequestStruct": request_struct,
             "DependencyStruct": dependency
         }
+        enum_models: Dict[EnumName, EnumModel] = {}
         model: CommandModel = CommandModel(name="SomeCommand",
                                            request=request_struct,
                                            response=StructModel(name="NotImportant", fields=[]),
@@ -140,7 +220,7 @@ class TestCommandModel(unittest.TestCase):
     'Field3': request.Field3,
 }
 """
-        recipe: str = model.get_request_serialization_recipe(struct_models, init_indentation_level=1)
+        recipe: str = model.get_request_serialization_recipe(struct_models, enum_models, init_indentation_level=1)
 
         self.assertEqual(recipe, expected_recipe)
 
@@ -206,6 +286,7 @@ class TestCommandModel(unittest.TestCase):
             "Struct4": struct_4,
             "Struct5": struct_5,
         }
+        enum_models: Dict[EnumName, EnumModel] = {}
         model: CommandModel = CommandModel(name="SomeCommand",
                                            request=request_struct,
                                            response=StructModel(name="NotImportant", fields=[]),
@@ -233,7 +314,7 @@ class TestCommandModel(unittest.TestCase):
     'Field_r4': request.Field_r4,
 }
 """
-        recipe: str = model.get_request_serialization_recipe(struct_models, init_indentation_level=1)
+        recipe: str = model.get_request_serialization_recipe(struct_models, enum_models, init_indentation_level=1)
 
         self.assertEqual(recipe, expected_recipe)
 
@@ -264,6 +345,43 @@ class TestCommandModel(unittest.TestCase):
 
         self.assertEqual(recipe, expected_recipe)
 
+    def test_get_response_deserialization_recipe_for_response_with_enum(self):
+        response_struct: StructModel = StructModel(
+            name="ResponseStruct",
+            fields=[
+                StructFieldModel(name="Field1", type="int"),
+                StructFieldModel(name="Field2", type="SomeEnum"),
+                StructFieldModel(name="Field3", type="float"),
+            ]
+        )
+        struct_models: Dict[StructName, StructModel] = {
+            "ResponseStruct": response_struct,
+        }
+        enum_models: Dict[EnumName, EnumModel] = {
+            "SomeEnum": EnumModel(
+                name="SomeEnum",
+                fields=[
+                    EnumFieldModel("enum_field_1", "value1"),
+                    EnumFieldModel("enum_field_2", "value2"),
+                    EnumFieldModel("enum_field_3", "value3"),
+                ]
+            )
+        }
+        model: CommandModel = CommandModel(name="SomeCommand",
+                                           request=StructModel(name="NotImportant", fields=[]),
+                                           response=response_struct,
+                                           silent=False)
+        expected_recipe: str = \
+"""ResponseStruct(
+    Field1=response['Field1'],
+    Field2=SomeEnum(response['Field2']),
+    Field3=response['Field3'],
+)
+"""
+        recipe: str = model.get_response_deserialization_recipe(struct_models, enum_models, init_indentation_level=1)
+
+        self.assertEqual(recipe, expected_recipe)
+
     def test_get_response_deserialization_recipe_for_response_with_list_of_primitives(self):
         response_struct: StructModel = StructModel(
             name="ResponseStruct",
@@ -288,6 +406,43 @@ class TestCommandModel(unittest.TestCase):
 )
 """
         recipe: str = model.get_response_deserialization_recipe(struct_models, {}, init_indentation_level=1)
+
+        self.assertEqual(recipe, expected_recipe)
+
+    def test_get_response_deserialization_recipe_for_response_with_list_of_enums(self):
+        response_struct: StructModel = StructModel(
+            name="ResponseStruct",
+            fields=[
+                StructFieldModel(name="Field1", type="List[SomeEnum]"),
+                StructFieldModel(name="Field2", type="str"),
+                StructFieldModel(name="Field3", type="float"),
+            ]
+        )
+        struct_models: Dict[StructName, StructModel] = {
+            "ResponseStruct": response_struct,
+        }
+        enum_models: Dict[EnumName, EnumModel] = {
+            "SomeEnum": EnumModel(
+                name="SomeEnum",
+                fields=[
+                    EnumFieldModel("enum_field_1", "value1"),
+                    EnumFieldModel("enum_field_2", "value2"),
+                    EnumFieldModel("enum_field_3", "value3"),
+                ]
+            )
+        }
+        model: CommandModel = CommandModel(name="SomeCommand",
+                                           request=StructModel(name="NotImportant", fields=[]),
+                                           response=response_struct,
+                                           silent=False)
+        expected_recipe: str = \
+"""ResponseStruct(
+    Field1=[SomeEnum(value) for value in response['Field1']],
+    Field2=response['Field2'],
+    Field3=response['Field3'],
+)
+"""
+        recipe: str = model.get_response_deserialization_recipe(struct_models, enum_models, init_indentation_level=1)
 
         self.assertEqual(recipe, expected_recipe)
 

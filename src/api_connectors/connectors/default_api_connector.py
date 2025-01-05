@@ -75,7 +75,7 @@ class DefaultApiConnector(ApiConnectorInterface):
             receive_iterations += 1
             received_data: bytes = self.__socket.receive(self.__response_buffer_size)
             encoded_response += received_data
-            response_ready = len(received_data) < self.__response_buffer_size and len(received_data) != 0
+            response_ready = len(received_data) < self.__response_buffer_size
 
             LOGGER.debug(f"Received {len(received_data)} response bytes")
 
