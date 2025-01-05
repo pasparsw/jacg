@@ -29,8 +29,9 @@ def custom_response_validation_callback(response_data: dict) -> None:
 
 if __name__ == "__main__":
     api_connector = ApiConnectorFactory.create(ApiConnectorType.SSL)
-    api_client = MyApiClient(api_connector, response_validation_cb=custom_response_validation_callback)
+    api_client = MyApiClient(api_connector)
 
+    api_client.set_response_validation_cb(custom_response_validation_callback)
     api_client.connect()
 
     # someSimpleCommand

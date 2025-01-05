@@ -50,9 +50,9 @@ class InvalidRequestType(Exception):
 
 
 class MyApiClient:
-    def __init__(self, api_connector: ApiConnectorInterface, response_validation_cb: Callable[[dict], None] = None):
-        self.__validate_response: Callable[[dict], None] = response_validation_cb
+    def __init__(self, api_connector: ApiConnectorInterface):
         self.__api_connector: ApiConnectorInterface = api_connector
+        self.__validate_response = None
 
     def connect(self) -> None:
         self.__api_connector.connect(hostname="some.hostname.com",
@@ -60,6 +60,9 @@ class MyApiClient:
                                      response_buffer_size=1024,
                                      response_timeout=5,
                                      socket_timeout=3)
+
+    def set_response_validation_cb(self, response_validation_cb: Callable[[dict], None]) -> None:
+        self.__validate_response: Callable[[dict], None] = response_validation_cb
 
     def some_simple_command(self, request: SomeSimpleCommandRequest) -> SomeSimpleCommandResponse:
         if not isinstance(request, SomeSimpleCommandRequest):
