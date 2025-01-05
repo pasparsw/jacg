@@ -34,7 +34,7 @@ class GeneratedContentWriter:
 
             save_to_file(full_output_path, content)
 
-        api_connectors_target_path: str = os.path.join(output_path, "api_client", API_CONNECTORS_DIR_NAME)
+        api_connectors_target_path: str = os.path.join(output_path, API_CONNECTORS_DIR_NAME)
 
         if os.path.exists(api_connectors_target_path):
             shutil.rmtree(api_connectors_target_path, onerror=read_only_remove_handler)

@@ -1,13 +1,17 @@
 import unittest
 
-from src.api_connectors.api_connector_factory import ApiConnectorFactory
-from src.api_connectors.api_connector_type import ApiConnectorType
-from src.api_connectors.clocks.default_clock import DefaultClock
-from src.api_connectors.connectors.api_connector_interface import ApiConnectorInterface
-from src.api_connectors.connectors.default_api_connector import DefaultApiConnector
-from src.api_connectors.json_encoders.default_json_encoder import DefaultJsonEncoder
-from src.api_connectors.sockets.default_socket import DefaultSocket
-from src.api_connectors.sockets.ssl_socket import SslSocket
+from test.unit.test_setup import init_autogen_code_test
+
+init_autogen_code_test()
+
+from api_connectors.api_connector_factory import ApiConnectorFactory
+from api_connectors.api_connector_type import ApiConnectorType
+from api_connectors.clocks.default_clock import DefaultClock
+from api_connectors.connectors.api_connector_interface import ApiConnectorInterface
+from api_connectors.connectors.default_api_connector import DefaultApiConnector
+from api_connectors.json_encoders.default_json_encoder import DefaultJsonEncoder
+from api_connectors.sockets.default_socket import DefaultSocket
+from api_connectors.sockets.ssl_socket import SslSocket
 
 
 class TestApiConnectorFactory(unittest.TestCase):

@@ -6,7 +6,7 @@ from src.paths import REPO_PATH
 sys.path.append(os.path.join(REPO_PATH, "example", "output"))
 
 from output.api_client.my_api_client import MyApiClient
-from output.api_client.api_connectors.api_connector_factory import ApiConnectorFactory, ApiConnectorType
+from output.api_connectors.api_connector_factory import ApiConnectorFactory, ApiConnectorType
 
 from output.structs.some_simple_command_request import SomeSimpleCommandRequest
 from output.structs.some_simple_command_response import SomeSimpleCommandResponse

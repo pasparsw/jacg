@@ -1,7 +1,7 @@
 import time
 
-from src.api_connectors.clocks.clock_interface import ClockInterface
-from src.api_connectors.types import Timestamp, PreciseTimestamp
+from api_connectors.clocks.clock_interface import ClockInterface
+from api_connectors.types import Timestamp, PreciseTimestamp
 
 
 class DefaultClock(ClockInterface):

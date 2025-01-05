@@ -1,9 +1,13 @@
 import unittest
-from unittest.mock import MagicMock, Mock, call
 
-from src.api_connectors.connectors.communication_timeout import CommunicationTimeout
-from src.api_connectors.connectors.default_api_connector import DefaultApiConnector
-from src.api_connectors.types import Seconds
+from unittest.mock import MagicMock, Mock, call
+from test.unit.test_setup import init_autogen_code_test
+
+init_autogen_code_test()
+
+from api_connectors.connectors.communication_timeout import CommunicationTimeout
+from api_connectors.connectors.default_api_connector import DefaultApiConnector
+from api_connectors.types import Seconds
 
 
 class TestDefaultApiConnector(unittest.TestCase):

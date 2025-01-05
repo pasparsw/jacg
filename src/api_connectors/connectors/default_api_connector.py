@@ -1,12 +1,12 @@
 from logging import getLogger
 
-from src.api_connectors.clocks.clock_interface import ClockInterface
-from src.api_connectors.connectors.communication_timeout import CommunicationTimeout
-from src.api_connectors.json_encoders.json_decoding_failed import JsonDecodingFailed
-from src.api_connectors.json_encoders.json_encoder_interface import JsonEncoderInterface
-from src.api_connectors.connectors.api_connector_interface import ApiConnectorInterface, Seconds
-from src.api_connectors.sockets.socket_interface import SocketInterface
-from src.api_connectors.types import DecodedRequest, DecodedResponse, Timestamp, PreciseTimestamp
+from api_connectors.clocks.clock_interface import ClockInterface
+from api_connectors.connectors.communication_timeout import CommunicationTimeout
+from api_connectors.json_encoders.json_decoding_failed import JsonDecodingFailed
+from api_connectors.json_encoders.json_encoder_interface import JsonEncoderInterface
+from api_connectors.connectors.api_connector_interface import ApiConnectorInterface, Seconds
+from api_connectors.sockets.socket_interface import SocketInterface
+from api_connectors.types import DecodedRequest, DecodedResponse, Timestamp, PreciseTimestamp
 
 LOGGER = getLogger("DefaultApiConnector")
 

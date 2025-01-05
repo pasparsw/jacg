@@ -1,7 +1,7 @@
 from logging import getLogger
 from typing import Callable
 
-from api_client.api_connectors.connectors.api_connector_interface import ApiConnectorInterface
+from api_connectors.connectors.api_connector_interface import ApiConnectorInterface
 
 @[for command_model in model.commands]@
 from @command_model.request.import_path import @command_model.request.name

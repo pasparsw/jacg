@@ -1,13 +1,13 @@
-from src.api_connectors.clocks.clock_interface import ClockInterface
-from src.api_connectors.clocks.default_clock import DefaultClock
-from src.api_connectors.json_encoders.default_json_encoder import DefaultJsonEncoder
-from src.api_connectors.json_encoders.json_encoder_interface import JsonEncoderInterface
-from src.api_connectors.connectors.api_connector_interface import ApiConnectorInterface
-from src.api_connectors.api_connector_type import ApiConnectorType
-from src.api_connectors.sockets.default_socket import DefaultSocket
-from src.api_connectors.sockets.socket_interface import SocketInterface
-from src.api_connectors.sockets.ssl_socket import SslSocket
-from src.api_connectors.connectors.default_api_connector import DefaultApiConnector
+from api_connectors.clocks.clock_interface import ClockInterface
+from api_connectors.clocks.default_clock import DefaultClock
+from api_connectors.json_encoders.default_json_encoder import DefaultJsonEncoder
+from api_connectors.json_encoders.json_encoder_interface import JsonEncoderInterface
+from api_connectors.connectors.api_connector_interface import ApiConnectorInterface
+from api_connectors.api_connector_type import ApiConnectorType
+from api_connectors.sockets.default_socket import DefaultSocket
+from api_connectors.sockets.socket_interface import SocketInterface
+from api_connectors.sockets.ssl_socket import SslSocket
+from api_connectors.connectors.default_api_connector import DefaultApiConnector
 
 
 class UnsupportedJsonSocketHandlerType(Exception):
@@ -22,7 +22,7 @@ class ApiConnectorFactory:
         if connector_type == ApiConnectorType.SSL:
             return ApiConnectorFactory.__create_ssl_connector()
 
-        raise UnsupportedJsonSocketHandlerType(f"Unsupported JSON socket handler type: {connector_type}")
+        raise UnsupportedJsonSocketHandlerType(f"Unsupported API connector type: {connector_type}")
 
     @staticmethod
     def __create_default_connector() -> ApiConnectorInterface:
