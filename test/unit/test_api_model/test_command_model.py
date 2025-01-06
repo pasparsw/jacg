@@ -382,6 +382,44 @@ class TestCommandModel(unittest.TestCase):
 
         self.assertEqual(recipe, expected_recipe)
 
+    def test_get_response_deserialization_recipe_for_response_with_optional_fields(self):
+        response_struct: StructModel = StructModel(
+            name="ResponseStruct",
+            fields=[
+                StructFieldModel(name="Field1", type="int"),
+                StructFieldModel(name="Field2", type="SomeEnum", default_value="SomeEnum.enum_field_1"),
+                StructFieldModel(name="Field3", type="float", default_value="3.14"),
+            ]
+        )
+        struct_models: Dict[StructName, StructModel] = {
+            "ResponseStruct": response_struct,
+        }
+        enum_models: Dict[EnumName, EnumModel] = {
+            "SomeEnum": EnumModel(
+                name="SomeEnum",
+                fields=[
+                    EnumFieldModel("enum_field_1", "value1"),
+                    EnumFieldModel("enum_field_2", "value2"),
+                    EnumFieldModel("enum_field_3", "value3"),
+                ]
+            )
+        }
+        model: CommandModel = CommandModel(name="SomeCommand",
+                                           request=StructModel(name="NotImportant", fields=[]),
+                                           response=response_struct,
+                                           silent=False)
+        expected_recipe: str = \
+"""ResponseStruct(
+    Field1=response['Field1'],
+    Field2=SomeEnum(response.get('Field2', SomeEnum.enum_field_1)),
+    Field3=response.get('Field3', 3.14),
+)
+"""
+        recipe: str = model.get_response_deserialization_recipe(struct_models, enum_models,
+                                                                init_indentation_level=1)
+
+        self.assertEqual(recipe, expected_recipe)
+
     def test_get_response_deserialization_recipe_for_response_with_list_of_primitives(self):
         response_struct: StructModel = StructModel(
             name="ResponseStruct",

@@ -11,7 +11,9 @@ from src.utils import save_to_file
 LOGGER = getLogger("GeneratedContentWriter")
 
 API_CONNECTORS_DIR_NAME: str = "api_connectors"
+EXCEPTIONS_DIR_NAME: str = "exceptions"
 API_CONNECTORS_DIR_PATH: str = os.path.join(SRC_PATH, API_CONNECTORS_DIR_NAME)
+EXCEPTIONS_DIR_PATH: str = os.path.join(SRC_PATH, EXCEPTIONS_DIR_NAME)
 
 
 def read_only_remove_handler(func, path, exc_info):
@@ -40,5 +42,12 @@ class GeneratedContentWriter:
             shutil.rmtree(api_connectors_target_path, onerror=read_only_remove_handler)
 
         shutil.copytree(API_CONNECTORS_DIR_PATH, api_connectors_target_path)
+
+        exceptions_target_path: str = os.path.join(output_path, EXCEPTIONS_DIR_NAME)
+
+        if os.path.exists(exceptions_target_path):
+            shutil.rmtree(exceptions_target_path, onerror=read_only_remove_handler)
+
+        shutil.copytree(EXCEPTIONS_DIR_PATH, exceptions_target_path)
 
         LOGGER.info("Saving of the generated content done")

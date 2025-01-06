@@ -52,8 +52,12 @@ def deserialize_response_recipe(response: StructModel, struct_models: Dict[Struc
             serialized_elements: str = deserialize_response_recipe(struct_models[field.underlying_type], struct_models,
                                                                    enum_models, indentation_level + 1, 'element',
                                                                    init_indentation_level, end_with_newline=False)
-            output += (f"{indentation}{field.name}=[{serialized_elements} for element in {current_name}['{field.name}']]"
-                       f",\n")
+            if field.has_default_value():
+                output += (f"{indentation}{field.name}=[{serialized_elements} for element in "
+                           f"{current_name}.get('{field.name}', {field.default_value})],\n")
+            else:
+                output += (f"{indentation}{field.name}=[{serialized_elements} for element in {current_name}['{field.name}']]"
+                           f",\n")
         elif field.is_list() and field.underlying_type in enum_models:
             output += (f"{indentation}{field.name}=[{field.underlying_type}(value) for value in "
                        f"{current_name}['{field.name}']],\n")
@@ -62,11 +66,21 @@ def deserialize_response_recipe(response: StructModel, struct_models: Dict[Struc
                                                                    enum_models, indentation_level + 1,
                                                                    f'{current_name}[\'{field.name}\']',
                                                                    init_indentation_level)
-            output += f"{indentation}{field.name}={serialized_elements}"
+            if field.has_default_value():
+                output += f"{indentation}{field.name}={serialized_elements.rstrip(',\n')} if '{field.name}' in {current_name} else {field.default_value},\n"
+            else:
+                output += f"{indentation}{field.name}={serialized_elements}"
         elif field.type in enum_models:
-            output += f"{indentation}{field.name}={field.type}({current_name}['{field.name}']),\n"
+            if field.has_default_value():
+                output += (f"{indentation}{field.name}={field.type}({current_name}.get('{field.name}', "
+                           f"{field.default_value})),\n")
+            else:
+                output += f"{indentation}{field.name}={field.type}({current_name}['{field.name}']),\n"
         else:
-            output += f"{indentation}{field.name}={current_name}['{field.name}'],\n"
+            if field.has_default_value():
+                output += f"{indentation}{field.name}={current_name}.get('{field.name}', {field.default_value}),\n"
+            else:
+                output += f"{indentation}{field.name}={current_name}['{field.name}'],\n"
 
     output += "    " * (indentation_level - 1) + ")"
 

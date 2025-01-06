@@ -1,26 +1,26 @@
-from output.api_client.my_api_client import MyApiClient
-from output.api_connectors.api_connector_factory import ApiConnectorFactory, ApiConnectorType
+from example.output.api_client.my_api_client import MyApiClient
+from example.output.api_connectors.api_connector_factory import ApiConnectorFactory, ApiConnectorType
 
-from output.structs.some_simple_command_request import SomeSimpleCommandRequest
-from output.structs.some_simple_command_response import SomeSimpleCommandResponse
+from example.output.structs.some_simple_command_request import SomeSimpleCommandRequest
+from example.output.structs.some_simple_command_response import SomeSimpleCommandResponse
 
-from output.structs.command_with_default_arg_request import CommandWithDefaultArgRequest
-from output.structs.command_with_default_arg_response import CommandWithDefaultArgResponse
+from example.output.structs.command_with_default_arg_request import CommandWithDefaultArgRequest
+from example.output.structs.command_with_default_arg_response import CommandWithDefaultArgResponse
 
-from output.structs.command_with_enums_request import CommandWithEnumsRequest, MyEnum
-from output.structs.command_with_enums_response import CommandWithEnumsResponse
+from example.output.structs.command_with_enums_request import CommandWithEnumsRequest, MyEnum
+from example.output.structs.command_with_enums_response import CommandWithEnumsResponse
 
-from output.structs.command_with_struct_arg_request import CommandWithStructArgRequest, MyStruct
-from output.structs.command_with_struct_arg_response import CommandWithStructArgResponse
+from example.output.structs.command_with_struct_arg_request import CommandWithStructArgRequest, MyStruct
+from example.output.structs.command_with_struct_arg_response import CommandWithStructArgResponse
 
-from output.structs.command_with_lists_request import CommandWithListsRequest
-from output.structs.command_with_lists_response import CommandWithListsResponse
+from example.output.structs.command_with_lists_request import CommandWithListsRequest
+from example.output.structs.command_with_lists_response import CommandWithListsResponse
 
-from output.structs.command_with_list_of_structs_request import CommandWithListOfStructsRequest
-from output.structs.command_with_list_of_structs_response import CommandWithListOfStructsResponse
+from example.output.structs.command_with_list_of_structs_request import CommandWithListOfStructsRequest
+from example.output.structs.command_with_list_of_structs_response import CommandWithListOfStructsResponse
 
-from output.structs.command_with_nested_structs_request import CommandWithNestedStructsRequest
-from output.structs.command_with_nested_structs_response import CommandWithNestedStructsResponse, MyComplexStruct
+from example.output.structs.command_with_nested_structs_request import CommandWithNestedStructsRequest
+from example.output.structs.command_with_nested_structs_response import CommandWithNestedStructsResponse, MyComplexStruct
 
 
 def custom_response_validation_callback(response_data: dict) -> None:
@@ -86,8 +86,8 @@ if __name__ == "__main__":
     response: CommandWithListOfStructsResponse = api_client.command_with_list_of_structs(request)
     print(f"Returned value:")
     for element in response.returned_value:
-        print(f"field_1 = {element.field_1}")
-        print(f"field_2 = {element.field_2}")
+        print(f"field_1 = {element.field_3}")
+        print(f"field_2 = {element.field_4}")
 
     # commandWithNestedStructs
     request = CommandWithNestedStructsRequest(

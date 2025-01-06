@@ -2,6 +2,7 @@ from logging import getLogger
 from typing import Callable
 
 from ..api_connectors.connectors.api_connector_interface import ApiConnectorInterface
+from ..exceptions.invalid_request_type import InvalidRequestType
 
 from ..structs.some_simple_command_request import SomeSimpleCommandRequest
 from ..structs.some_simple_command_response import SomeSimpleCommandResponse
@@ -43,10 +44,6 @@ def log_debug(message: str, is_silent: bool) -> None:
     if is_silent:
         return
     LOGGER.debug(message)
-
-
-class InvalidRequestType(Exception):
-    pass
 
 
 class MyApiClient:

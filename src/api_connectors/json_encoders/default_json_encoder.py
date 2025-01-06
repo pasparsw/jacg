@@ -2,7 +2,7 @@ import json
 
 from logging import getLogger
 
-from .json_decoding_failed import JsonDecodingFailed
+from ...exceptions.json_decoding_failed import JsonDecodingFailed
 from .json_encoder_interface import JsonEncoderInterface
 
 LOGGER = getLogger("DefaultJsonEncoder")

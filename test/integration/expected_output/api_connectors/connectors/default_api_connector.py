@@ -1,8 +1,8 @@
 from logging import getLogger
 
 from ..clocks.clock_interface import ClockInterface
-from .communication_timeout import CommunicationTimeout
-from ..json_encoders.json_decoding_failed import JsonDecodingFailed
+from ...exceptions.communication_timeout import CommunicationTimeout
+from ...exceptions.json_decoding_failed import JsonDecodingFailed
 from ..json_encoders.json_encoder_interface import JsonEncoderInterface
 from .api_connector_interface import ApiConnectorInterface, Seconds
 from ..sockets.socket_interface import SocketInterface
@@ -34,7 +34,7 @@ class DefaultApiConnector(ApiConnectorInterface):
     def connect(self, hostname: str, port: int, response_buffer_size: int, response_timeout: Seconds,
                 socket_timeout: Seconds) -> None:
         LOGGER.debug(f"Connecting default API connector to {hostname}:{port} with buffer size {response_buffer_size}, "
-                     f"response timeout {response_timeout}s and socket timeout {socket_timeout}")
+                     f"response timeout {response_timeout}s and socket timeout {socket_timeout}s")
 
         start_timestamp: PreciseTimestamp = self.__clock.get_precise_time()
 

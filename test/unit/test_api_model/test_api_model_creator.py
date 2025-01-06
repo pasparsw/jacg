@@ -5,7 +5,6 @@ from src.api_model.api_model_creator import ApiModelCreator
 from src.api_model.command_model import CommandModel
 from src.api_model.enum_field_model import EnumFieldModel
 from src.api_model.enum_model import EnumModel
-from src.api_model.list_model import ListModel
 from src.api_model.struct_field_model import StructFieldModel
 from src.api_model.struct_model import StructModel
 
@@ -226,9 +225,7 @@ class TestApiModelCreator(unittest.TestCase):
                         StructFieldModel(name="SomeField2", type="List[int]"),
                         StructFieldModel(name="SomeField3", type="float"),
                     ],
-                    dependencies={
-                        "List": ListModel()
-                    }
+                    dependencies={}
                 ),
                 "AnotherStruct": StructModel(
                     name="AnotherStruct",
@@ -237,9 +234,7 @@ class TestApiModelCreator(unittest.TestCase):
                         StructFieldModel(name="AnotherField2", type="int"),
                         StructFieldModel(name="AnotherField3", type="List[float]"),
                     ],
-                    dependencies={
-                        "List": ListModel()
-                    }
+                    dependencies={}
                 )
             },
             commands=[]
@@ -308,8 +303,7 @@ class TestApiModelCreator(unittest.TestCase):
                                 EnumFieldModel(name="SomeEnumField2", value="1"),
                                 EnumFieldModel(name="SomeEnumField3", value="2"),
                             ]
-                        ),
-                        "List": ListModel()
+                        )
                     }
                 )
             },

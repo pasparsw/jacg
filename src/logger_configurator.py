@@ -22,4 +22,4 @@ class LoggerConfigurator:
         if logging_level_str == 'fatal':
             return logging.FATAL
 
-        raise Exception(f'Unable to get logging level from string - unknown logging level "{logging_level_str}"!')
+        raise RuntimeError(f'Unable to get logging level from string - unknown logging level "{logging_level_str}"!')
