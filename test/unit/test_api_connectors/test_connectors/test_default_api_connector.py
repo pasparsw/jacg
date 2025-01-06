@@ -2,7 +2,7 @@ import unittest
 
 from unittest.mock import MagicMock, Mock, call
 
-from src.api_connectors.connectors.communication_timeout import CommunicationTimeout
+from src.exceptions.communication_timeout import CommunicationTimeout
 from src.api_connectors.connectors.default_api_connector import DefaultApiConnector
 from src.api_connectors.types import Seconds
 

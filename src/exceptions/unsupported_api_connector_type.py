@@ -1,0 +1,2 @@
+class UnsupportedApiConnectorType(Exception):
+    pass

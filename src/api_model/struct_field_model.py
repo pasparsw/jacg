@@ -16,8 +16,19 @@ class StructFieldModel:
             return self.type[self.type.find("[") + 1:self.type.find("]")]
         return self.type
 
+    @property
+    def non_mutable_default_value(self) -> any:
+        if self.is_list() and self.has_default_value() and self.default_value == "[]":
+            return "field(default_factory=lambda: [])"
+        return self.default_value
+
     def is_list(self) -> bool:
         return "[" in self.type and "]" in self.type
 
     def has_default_value(self) -> bool:
         return self.default_value is not None
+
+    def default_value_empty(self):
+        if self.default_value:
+            return self.default_value == "[]" or self.default_value == "{}"
+        return True

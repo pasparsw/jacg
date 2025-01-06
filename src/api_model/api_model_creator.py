@@ -120,12 +120,8 @@ class ApiModelCreator:
                 actual_type: str = field.type
 
                 if field.is_list():
-                    list_model: ListModel = ListModel()
                     actual_type = field.underlying_type
-
                     LOGGER.debug(f"{struct_name} depends on a List of {actual_type}")
-
-                    struct_model.dependencies[list_model.name] = list_model
                 if actual_type in model.enums:
                     LOGGER.debug(f"{struct_name} depends on {actual_type} enum")
                     struct_model.dependencies[actual_type] = model.enums[actual_type]

@@ -1,8 +1,8 @@
 from logging import getLogger
 
 from ..clocks.clock_interface import ClockInterface
-from .communication_timeout import CommunicationTimeout
-from ..json_encoders.json_decoding_failed import JsonDecodingFailed
+from ...exceptions.communication_timeout import CommunicationTimeout
+from ...exceptions.json_decoding_failed import JsonDecodingFailed
 from ..json_encoders.json_encoder_interface import JsonEncoderInterface
 from .api_connector_interface import ApiConnectorInterface, Seconds
 from ..sockets.socket_interface import SocketInterface

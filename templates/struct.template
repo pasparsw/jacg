@@ -1,7 +1,16 @@
 from dataclasses import dataclass
 
+@[for field in model.fields]@
+@[if field.is_list()]@
+from typing import List
+@[end if]@
+@[if field.is_list() and field.has_default_value() and field.default_value_empty()]@
+from dataclasses import field
+@[end if]@
+@[end for]@
+
 @[for dependency_name, dependency_model in model.dependencies.items()]@
-@[if "typing" not in dependency_model.import_path]@
+@[if "typing" not in dependency_model.import_path and "dataclass" not in dependency_model.import_path]@
 from ..@dependency_model.import_path import @dependency_name
 @[else]@
 from @dependency_model.import_path import @dependency_name
@@ -12,7 +21,7 @@ from @dependency_model.import_path import @dependency_name
 class @model.name:
 @[for field in model.fields]@
 @[if field.has_default_value()]@
-    @field.name: @field.type = @field.default_value
+    @field.name: @field.type = @field.non_mutable_default_value
 @[else]@
     @field.name: @field.type
 @[end if]@
