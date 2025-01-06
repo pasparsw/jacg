@@ -34,7 +34,7 @@ class DefaultApiConnector(ApiConnectorInterface):
     def connect(self, hostname: str, port: int, response_buffer_size: int, response_timeout: Seconds,
                 socket_timeout: Seconds) -> None:
         LOGGER.debug(f"Connecting default API connector to {hostname}:{port} with buffer size {response_buffer_size}, "
-                     f"response timeout {response_timeout}s and socket timeout {socket_timeout}")
+                     f"response timeout {response_timeout}s and socket timeout {socket_timeout}s")
 
         start_timestamp: PreciseTimestamp = self.__clock.get_precise_time()
 

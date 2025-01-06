@@ -5,7 +5,6 @@ from src.api_model.api_model import ApiModel
 from src.api_model.command_model import CommandModel
 from src.api_model.enum_field_model import EnumFieldModel
 from src.api_model.enum_model import EnumModel, EnumName
-from src.api_model.list_model import ListModel
 from src.api_model.struct_field_model import StructFieldModel
 from src.api_model.struct_model import StructName, StructModel
 from src.utils import snake_case_to_camel_case

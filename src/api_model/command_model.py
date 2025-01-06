@@ -66,7 +66,10 @@ def deserialize_response_recipe(response: StructModel, struct_models: Dict[Struc
                                                                    enum_models, indentation_level + 1,
                                                                    f'{current_name}[\'{field.name}\']',
                                                                    init_indentation_level)
-            output += f"{indentation}{field.name}={serialized_elements}"
+            if field.has_default_value():
+                output += f"{indentation}{field.name}={serialized_elements.rstrip(',\n')} if '{field.name}' in {current_name} else {field.default_value},\n"
+            else:
+                output += f"{indentation}{field.name}={serialized_elements}"
         elif field.type in enum_models:
             if field.has_default_value():
                 output += (f"{indentation}{field.name}={field.type}({current_name}.get('{field.name}', "

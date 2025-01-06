@@ -8,10 +8,7 @@ from .sockets.default_socket import DefaultSocket
 from .sockets.socket_interface import SocketInterface
 from .sockets.ssl_socket import SslSocket
 from .connectors.default_api_connector import DefaultApiConnector
-
-
-class UnsupportedJsonSocketHandlerType(Exception):
-    pass
+from ..exceptions.unsupported_api_connector_type import UnsupportedApiConnectorType
 
 
 class ApiConnectorFactory:
@@ -22,7 +19,7 @@ class ApiConnectorFactory:
         if connector_type == ApiConnectorType.SSL:
             return ApiConnectorFactory.__create_ssl_connector()
 
-        raise UnsupportedJsonSocketHandlerType(f"Unsupported API connector type: {connector_type}")
+        raise UnsupportedApiConnectorType(f"Unsupported API connector type: {connector_type}")
 
     @staticmethod
     def __create_default_connector() -> ApiConnectorInterface:

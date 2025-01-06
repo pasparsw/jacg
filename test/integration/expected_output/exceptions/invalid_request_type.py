@@ -1,0 +1,2 @@
+class InvalidRequestType(Exception):
+    pass
