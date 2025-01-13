@@ -1,11 +1,11 @@
 from abc import abstractmethod
 
-from ..types import Seconds
+from ..types import Milliseconds
 
 
 class SocketInterface:
     @abstractmethod
-    def connect(self, hostname: str, port: int, timeout: Seconds) -> None:
+    def connect(self, hostname: str, port: int, timeout: Milliseconds) -> None:
         pass
 
     @abstractmethod

@@ -4,9 +4,9 @@ from ..clocks.clock_interface import ClockInterface
 from ...exceptions.communication_timeout import CommunicationTimeout
 from ...exceptions.json_decoding_failed import JsonDecodingFailed
 from ..json_encoders.json_encoder_interface import JsonEncoderInterface
-from .api_connector_interface import ApiConnectorInterface, Seconds
+from .api_connector_interface import ApiConnectorInterface
 from ..sockets.socket_interface import SocketInterface
-from ..types import DecodedRequest, DecodedResponse, Timestamp, PreciseTimestamp
+from ..types import DecodedRequest, DecodedResponse, PreciseTimestamp, Milliseconds
 
 LOGGER = getLogger("DefaultApiConnector")
 
@@ -17,7 +17,9 @@ class DefaultApiConnector(ApiConnectorInterface):
         self.__json_encoder: JsonEncoderInterface = json_encoder
         self.__clock: ClockInterface = clock
         self.__response_buffer_size: int = 0
-        self.__timeout: Seconds = 0
+        self.__timeout: Milliseconds = 0
+        self.__min_pause_between_requests: Milliseconds = 0
+        self.__last_request_timestamp: PreciseTimestamp = self.__clock.get_precise_time()
 
     @property
     def socket(self) -> SocketInterface:
@@ -31,23 +33,34 @@ class DefaultApiConnector(ApiConnectorInterface):
     def clock(self) -> ClockInterface:
         return self.__clock
 
-    def connect(self, hostname: str, port: int, response_buffer_size: int, response_timeout: Seconds,
-                socket_timeout: Seconds) -> None:
-        LOGGER.debug(f"Connecting default API connector to {hostname}:{port} with buffer size {response_buffer_size}, "
-                     f"response timeout {response_timeout}s and socket timeout {socket_timeout}s")
+    def connect(self, hostname: str, port: int, response_buffer_size: int, response_timeout: Milliseconds,
+                socket_timeout: Milliseconds, min_pause_between_requests: Milliseconds) -> None:
+        LOGGER.debug(f"Connecting default API connector to {hostname}:{port}")
 
         start_timestamp: PreciseTimestamp = self.__clock.get_precise_time()
 
         self.__socket.connect(hostname, port, socket_timeout)
         self.__response_buffer_size = response_buffer_size
         self.__timeout = response_timeout
+        self.__min_pause_between_requests = min_pause_between_requests
 
         LOGGER.debug(f"Default API connector connected in {self.__clock.get_precise_time() - start_timestamp}ms")
 
     def send(self, request: DecodedRequest) -> DecodedResponse:
         LOGGER.debug(f"Sending request")
 
-        start_timestamp: Timestamp = self.__clock.get_time()
+        time_elapsed_since_last_request: Milliseconds = self.__clock.get_precise_time() - self.__last_request_timestamp
+
+        if time_elapsed_since_last_request < self.__min_pause_between_requests:
+            remaining_time_to_wait: Milliseconds = self.__min_pause_between_requests - time_elapsed_since_last_request
+            LOGGER.warning(f"Time elapsed from last request is shorter than the minimum required one "
+                           f"({time_elapsed_since_last_request}ms vs {self.__min_pause_between_requests})! Sleeping for "
+                           f"{remaining_time_to_wait}ms before sending next request...")
+            self.__clock.sleep(remaining_time_to_wait)
+
+        self.__last_request_timestamp = self.__clock.get_precise_time()
+
+        start_timestamp: PreciseTimestamp = self.__clock.get_precise_time()
         encoded_request: bytes = self.__json_encoder.encode(request)
         total_data_sent: int = 0
         send_iterations: int = 0
@@ -95,6 +108,6 @@ class DefaultApiConnector(ApiConnectorInterface):
 
         return decoded_response
 
-    def __check_timeout(self, start_timestamp: Timestamp, error_message: str) -> None:
-        if self.__clock.get_time() - start_timestamp > self.__timeout:
+    def __check_timeout(self, start_timestamp: PreciseTimestamp, error_message: str) -> None:
+        if self.__clock.get_precise_time() - start_timestamp > self.__timeout:
             raise CommunicationTimeout(error_message)

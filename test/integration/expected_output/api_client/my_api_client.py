@@ -55,8 +55,9 @@ class MyApiClient:
         self.__api_connector.connect(hostname="some.hostname.com",
                                      port=1234,
                                      response_buffer_size=1024,
-                                     response_timeout=5,
-                                     socket_timeout=3)
+                                     response_timeout=5000,
+                                     socket_timeout=2000,
+                                     min_pause_between_requests=250)
 
     def set_response_validation_cb(self, response_validation_cb: Callable[[dict], None]) -> None:
         self.__validate_response: Callable[[dict], None] = response_validation_cb

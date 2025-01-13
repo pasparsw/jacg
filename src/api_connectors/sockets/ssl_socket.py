@@ -1,10 +1,10 @@
 import socket
 import ssl
 
-from logging import getLogger, exception
+from logging import getLogger
 
 from .socket_interface import SocketInterface
-from ..types import Seconds
+from ..types import Milliseconds
 
 LOGGER = getLogger("SslSocket")
 
@@ -13,7 +13,7 @@ class SslSocket(SocketInterface):
     def __init__(self):
         self.__socket = None
 
-    def connect(self, hostname: str, port: int, timeout: Seconds) -> None:
+    def connect(self, hostname: str, port: int, timeout: Milliseconds) -> None:
         LOGGER.debug(f"Connecting to {hostname}:{port} with timeout {timeout}")
 
         self.__socket = socket.create_connection((hostname, port))
