@@ -1,13 +1,13 @@
 from abc import abstractmethod
 
-from ..types import Timestamp, PreciseTimestamp
+from ..types import PreciseTimestamp, Milliseconds
 
 
 class ClockInterface:
     @abstractmethod
-    def get_time(self) -> Timestamp:
+    def get_precise_time(self) -> PreciseTimestamp:
         pass
 
     @abstractmethod
-    def get_precise_time(self) -> PreciseTimestamp:
+    def sleep(self, duration: Milliseconds) -> None:
         pass

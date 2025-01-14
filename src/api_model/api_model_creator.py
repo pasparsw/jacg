@@ -19,7 +19,8 @@ class ApiModelCreator:
         model: ApiModel = ApiModel(name=api_spec["api_name"], hostname=api_spec["hostname"], port=api_spec["port"],
                                    response_buffer_size=api_spec["response_buffer_size"],
                                    response_timeout=api_spec["response_timeout"],
-                                   socket_timeout=api_spec["socket_timeout"])
+                                   socket_timeout=api_spec["socket_timeout"],
+                                   min_pause_between_requests=api_spec["min_pause_between_requests"])
 
         model.enums = self.__create_enum_models(api_spec["enums"])
         model.structs = self.__create_struct_models(api_spec["structs"], api_spec["commands"])
