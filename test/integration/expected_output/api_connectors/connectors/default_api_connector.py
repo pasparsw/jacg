@@ -54,8 +54,8 @@ class DefaultApiConnector(ApiConnectorInterface):
         if time_elapsed_since_last_request < self.__min_pause_between_requests:
             remaining_time_to_wait: Milliseconds = self.__min_pause_between_requests - time_elapsed_since_last_request
             LOGGER.warning(f"Time elapsed from last request is shorter than the minimum required one "
-                           f"({time_elapsed_since_last_request}ms vs {self.__min_pause_between_requests})! Sleeping for "
-                           f"{remaining_time_to_wait}ms before sending next request...")
+                           f"({time_elapsed_since_last_request}ms vs {self.__min_pause_between_requests}ms)! Sleeping "
+                           f"for {remaining_time_to_wait}ms before sending next request...")
             self.__clock.sleep(remaining_time_to_wait)
 
         self.__last_request_timestamp = self.__clock.get_precise_time()
@@ -92,14 +92,12 @@ class DefaultApiConnector(ApiConnectorInterface):
             encoded_response += received_data
             response_ready = len(received_data) < self.__response_buffer_size
 
-            LOGGER.debug(f"Received {len(received_data)} response bytes")
-
             if response_ready:
                 try:
                     decoded_response = self.__json_encoder.decode(encoded_response)
                     response_ready = True
                 except JsonDecodingFailed as _:
-                    LOGGER.debug("Response not ready yet - listening for further data...")
+                    # response not ready yet - listening for further data...
                     response_ready = False
 
         receive_elapsed_time: PreciseTimestamp = self.__clock.get_precise_time() - receive_start_timestamp

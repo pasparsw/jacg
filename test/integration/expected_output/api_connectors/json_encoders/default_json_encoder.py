@@ -20,13 +20,10 @@ class DefaultJsonEncoder(JsonEncoderInterface):
 
     def decode(self, encoded_json: bytes) -> dict:
         try:
-            LOGGER.debug(f"Decoding {len(encoded_json)} bytes to JSON")
-
             decoded_json, size = self.__decoder.raw_decode(encoded_json.decode())
 
             LOGGER.debug(f"Decoded JSON of size {size}")
 
             return decoded_json
-        except json.decoder.JSONDecodeError as e:
-            LOGGER.error(e)
+        except json.decoder.JSONDecodeError as _:
             raise JsonDecodingFailed()

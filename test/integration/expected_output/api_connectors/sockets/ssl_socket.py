@@ -30,7 +30,6 @@ class SslSocket(SocketInterface):
 
     def receive(self, buffer_size: int) -> bytes:
         try:
-            LOGGER.debug(f"Receiving buffer of {buffer_size} bytes")
             return self.__socket.recv(buffer_size)
         except TimeoutError as e:
             LOGGER.warning(f"{e} - returning empty byte string")
